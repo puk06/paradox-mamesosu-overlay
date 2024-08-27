@@ -94,22 +94,65 @@ function getUserData(user = tokenValue.banchoId) {
     }
 }
 
+function getMamestagramData(user = "1", gamemode = "0") {
+    const apiUrl = `https://api.mamesosu.net/v1/get_player_info?id=${user}&scope=all`;
+
+    return fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const apiData = [
+                {
+                    "user_id": id,
+                    "username": data.player.info.name,
+                    "join_date": "Unknown",
+                    "playcount": data.player.stats[gamemode].plays,
+                    "ranked_score": data.player.stats[gamemode].rscore,
+                    "total_score": data.player.stats[gamemode].tscore,
+                    "pp_rank": data.player.stats[gamemode].rank,
+                    "level": 0,
+                    "pp_raw": data.player.stats[gamemode].pp,
+                    "accuracy": data.player.stats[gamemode].acc,
+                    "count_rank_ss": data.player.stats[gamemode].x_count,
+                    "count_rank_ssh": data.player.stats[gamemode].xh_count,
+                    "count_rank_s": data.player.stats[gamemode].s_count,
+                    "count_rank_sh": data.player.stats[gamemode].sh_count,
+                    "count_rank_a": data.player.stats[gamemode].a_count,
+                    "country": data.player.info.country.toUpperCase(),
+                    "total_seconds_played": data.player.stats[gamemode].playtime,
+                    "pp_country_rank": data.player.stats[gamemode].country_rank,
+                    "events": []
+                }
+            ];
+            data = apiData;
+
+            let userData = '';
+            data.forEach(user => {
+                for (const key in user) {
+                    if (cacheUserData.hasOwnProperty(key)) {
+                        userData += key + ': ' + user[key] + '<br>';
+                        cacheUserData[key] = user[key];
+                    }
+                }
+            });
+            document.getElementById('apiconnect').style.color = "#99ccff";
+            document.getElementById('apiconnect').innerHTML = "Connected.";
+            return userData;
+        });
+}
+
 function reloadUserData(user = tokenValue.banchoId) {
     isPlaying = false;
-    if (saved.apiKey !== null && saved.apiKey !== '') {
-        if (user === "osu!") {
-            user = tokenValue.banchoId;
-        }
-        if (user == null) {
-            user = "";
-        }
-        if (tokenValue.osuIsRunning === 0) {
-            return;
-        }
-        getUserData(user)
+    if (tokenValue.osuIsRunning === 0) {
+        return;
+    }
+
+    const MamestagramId = "257";
+    const MamestagramGameMode = "1";
+
+    getMamestagramData(MamestagramId, MamestagramGameMode)
         .then(userData => {
             validUserdata = true;
-            panelImage.src = `https://a.ppy.sh/${cacheUserData.user_id}`;
+            panelImage.src = `https://a.mamesosu.net/${cacheUserData.user_id}`;
             showElement([avatar]);
             hideElement([document.getElementById('paddingleft'), document.getElementById('detailleft'), document.getElementById('paddingright'), document.getElementById('detailright')]);
             setTimeout(() => {
@@ -135,18 +178,13 @@ function reloadUserData(user = tokenValue.banchoId) {
                 } else {
                     hideElement([document.getElementById('paddingright'), document.getElementById('detailright')]);
                 }
-            }, 250);        
+            }, 250);
         })
         .catch(error => {
             validUserdata = false;
             analyzerHide();
             console.error('Error:', error);
         });
-    } else {
-        validUserdata = false;
-        analyzerHide();
-        console.log('API key is empty.'); // APIキーが空の場合はログを出力する
-    }
 }
 
 function settingHide() {
