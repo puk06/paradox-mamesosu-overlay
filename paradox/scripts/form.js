@@ -100,16 +100,24 @@ function getMamestagramData(user = "1", gamemode = "0") {
     return fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
+            const date = new Date(data.player.info.creation_time * 1000);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hour = date.getHours();
+            const minute = date.getMinutes();
+            const second = date.getSeconds();
+            const join_date = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
             const apiData = [
                 {
                     "user_id": user,
                     "username": data.player.info.name,
-                    "join_date": "Unknown",
+                    "join_date": join_date,
                     "playcount": data.player.stats[gamemode].plays,
                     "ranked_score": data.player.stats[gamemode].rscore,
                     "total_score": data.player.stats[gamemode].tscore,
                     "pp_rank": data.player.stats[gamemode].rank,
-                    "level": 0,
+                    "level": Math.round(GetLevelPrecise(data.player.stats[gamemode].tscore) * 10000) / 10000,
                     "pp_raw": data.player.stats[gamemode].pp,
                     "accuracy": data.player.stats[gamemode].acc,
                     "count_rank_ss": data.player.stats[gamemode].x_count,
@@ -303,6 +311,39 @@ function extractFileNameFromDataURL(dataURL) {
         return matches[1];
     }
     return null;
+}
+
+function GetLevel(score) {
+	let i = 1;
+	for (;;) {
+		const lScore = GetRequiredScoreForLevel(i);
+		if (score < lScore) {
+			return i - 1;
+		}
+		i++;
+	}
+}
+
+function GetRequiredScoreForLevel(level) {
+	if (level <= 100) {
+		if (level > 1) {
+			return Math.floor(5000 / 3 * (4 * Math.pow(level, 3) - 3 * Math.pow(level, 2) - level) + Math.floor(1.25 * Math.pow(1.8, level - 60)));
+		}
+		return 1;
+	}
+	return 26931190829 + 100000000000 * ( level - 100 );
+}
+
+function GetLevelPrecise(score) {
+	const baseLevel = GetLevel(score);
+	const baseLevelScore = GetRequiredScoreForLevel(baseLevel);
+	const scoreProgress = score - baseLevelScore;
+	const scoreLevelDifference = GetRequiredScoreForLevel(baseLevel+1) - baseLevelScore;
+	const res = scoreProgress / scoreLevelDifference + baseLevel;
+	if (!isFinite(res)) {
+		return 0;
+	}
+	return res;
 }
 
 function initializeSetting() {
