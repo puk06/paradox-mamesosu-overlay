@@ -3,6 +3,10 @@
 <img src="./sample1.png" width="48%"> <img src="./sample2.png" width="48%">
 <img src="./sample3.png" width="48%"> <img src="./sample4.png" width="48%">
 
+このオーバーレイを使うには、MamestagramIDとGameModeが必要です！
+scripts/Form.jsの149、150行目を自分が表示したいものに変更してください！
+
+
 日本語の説明は[こちら](./README_JP.md)
 
 ## Overview
