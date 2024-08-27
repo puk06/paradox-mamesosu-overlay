@@ -102,7 +102,7 @@ function getMamestagramData(user = "1", gamemode = "0") {
         .then(data => {
             const apiData = [
                 {
-                    "user_id": id,
+                    "user_id": user,
                     "username": data.player.info.name,
                     "join_date": "Unknown",
                     "playcount": data.player.stats[gamemode].plays,
