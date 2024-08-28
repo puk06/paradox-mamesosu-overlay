@@ -606,7 +606,12 @@ const audioControl = setInterval(() => {
             }
 
             if (consecutiveCount >= 2 && !audioElement.paused && cache.rawStatus !== 7) {
-                audioElement.pause();
+                try {
+                    audioElement.pause();
+                } catch (error) {
+                    console.log(error);
+                }
+
                 consecutiveCount = 0;
                 audioError.style.opacity = 0;
                 audiostatus.innerHTML = "";
@@ -616,7 +621,12 @@ const audioControl = setInterval(() => {
             }
 
             if (playingCount >= 2 && audioElement.paused) {
-                audioElement.play();
+                try {
+                    audioElement.play();
+                } catch (error) {
+                    console.log(error);
+                }
+
                 playingCount = 0;
                 audioError.style.opacity = 0;
                 audiostatus.innerHTML = "";
