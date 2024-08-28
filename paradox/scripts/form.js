@@ -6,11 +6,12 @@ async function checkUpdate() {
     document.getElementById('version').innerHTML = version;
     const response = await fetch('https://api.github.com/repos/puk06/paradox-mamesosu-overlay/releases/latest');
     const data = await response.json();
-    if (version === data.tag_name) {
-        console.log("up-to-date.");
+
+    if (!data.tag_name) {
+        document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #ffcc99;">&nbsp;(update not found)</span>`;
+    } else if (version === data.tag_name) {
         document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #ccff99;">&nbsp;(up-to-date.)</span>`;
     } else {
-        console.log("update is available.");
         document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #cc99ff;">&nbsp;(update is available.)</span>`;
     }
 }
@@ -35,7 +36,7 @@ function getLocal(variableName) {
 
 function getLocalAll() {
     return new Promise((resolve) => {
-        for (let key in saved) {
+        for (const key in saved) {
             const value = getLocal(key);
             if (value !== null) {
                 if (typeof saved[key] === 'object' && typeof value === 'object') {
@@ -47,19 +48,6 @@ function getLocalAll() {
         }
         resolve(saved);
     });
-}
-
-function displayLocalStorage() {
-    const localStorageKeys = Object.keys(localStorage);
-
-    if (localStorageKeys.length === 0) {
-        console.log("Localstorage is empty.");
-    } else {
-        localStorageKeys.forEach(key => {
-            const value = localStorage.getItem(key);
-            console.log(`${key}: ${value}`);
-        });
-    }
 }
 
 async function getMamestagramData(username = tokenValue.banchoId, gamemode = "0") {
@@ -110,8 +98,7 @@ async function getMamestagramData(username = tokenValue.banchoId, gamemode = "0"
             "count_rank_a": data.player.stats[gamemode].a_count,
             "country": data.player.info.country.toUpperCase(),
             "total_seconds_played": data.player.stats[gamemode].playtime,
-            "pp_country_rank": data.player.stats[gamemode].country_rank,
-            "events": []
+            "pp_country_rank": data.player.stats[gamemode].country_rank
     };
 
     for (const key in apiData) {
@@ -417,11 +404,10 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('Dontshow').addEventListener('change', function(event) {
     if (this.checked) {
         saved.warning = false;
-        setLocal('warning', saved.warning);
     } else {
         saved.warning = true;
-        setLocal('warning', saved.warning);
     }
+    setLocal('warning', saved.warning);
 });
 
 document.getElementById('custompanelbg').addEventListener("change", function(event) {

@@ -13,9 +13,7 @@ ws.onclose = event => {
 ws.onerror = error => console.log("Socket Error: ", error);
 
 ws.onmessage = (wsEvent) => {
-
     try {
-
         /*receive*/
         Object.assign(tokenValue, JSON.parse(wsEvent.data));
 
@@ -195,14 +193,14 @@ ws.onmessage = (wsEvent) => {
             artistcontainer.style.transition = "all 0.2s";
             artistcontainer.style.opacity = 0;
             setTimeout(() => {
-                artist.innerHTML = cache.artistRoman;
+                artist.innerHTML = checkUndefined(cache.artistRoman);
                 const artistwidth = artist.getBoundingClientRect().width;
                 setTimeout(() => {
                     if (artistwidth > 520) {
                         artist.style.transition = "all 0.5s";
                         artistcontainer.style.opacity = 1;
                         artist.style.paddingLeft = "0px";
-                        artist.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' + cache.artistRoman + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' + cache.artistRoman;
+                        artist.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' + checkUndefined(cache.artistRoman) + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' + checkUndefined(cache.artistRoman);
                         artist.style.animationDuration = artistwidth / 45 + "s";
                         artist.classList = "scroll";
                         artistcontainer.classList = "fadescroll";
@@ -225,17 +223,18 @@ ws.onmessage = (wsEvent) => {
         /*title*/
         if (cache.titleRoman !== tokenValue.titleRoman) {
             cache.titleRoman = tokenValue.titleRoman;
+
             titlecontainer.style.transition = "all 0.2s";
             titlecontainer.style.opacity = 0;
             setTimeout(() => {
-                title.innerHTML = cache.titleRoman;
+                title.innerHTML = checkUndefined(tokenValue.titleRoman);
                 const titlewidth = title.getBoundingClientRect().width;
                 setTimeout(() => {
                     if (titlewidth > 520) {
                         titlecontainer.style.transition = "all 0.5s";
                         titlecontainer.style.opacity = 1;
                         title.style.paddingLeft = "0px";
-                        title.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' + cache.titleRoman + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' + cache.titleRoman;
+                        title.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' + checkUndefined(tokenValue.titleRoman) + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' + checkUndefined(tokenValue.titleRoman);
                         title.style.animationDuration = titlewidth / 45 + "s";
                         title.classList = "scroll";
                         titlecontainer.classList = "fadescroll";
@@ -259,16 +258,23 @@ ws.onmessage = (wsEvent) => {
         if (cache.diffName !== tokenValue.diffName || cache.creator !== tokenValue.creator) {
             cache.diffName = tokenValue.diffName;
             cache.creator = tokenValue.creator;
+
             const formatTime = {
                 minute: Math.floor(tokenValue.totaltime / 60000),
                 second: Math.floor(tokenValue.totaltime / 1000 % 60)
             };
+
+            function formatTimeString(time) {
+                if (isNaN(time)) return '00';
+                return time < 10 ? '0' + time : time;
+            }
+
             diffcontainer.style.transition = "all 0.2s";
             diffcontainer.style.opacity = 0;
             setTimeout(() => {
-                difflavel.innerHTML = cache.diffName;
-                totalTime.innerHTML = `(${formatTime.minute < 10 ? '0' : ''}${formatTime.minute}:${formatTime.second < 10 ? '0' : ''}${formatTime.second})`;
-                mapper.innerHTML = `&nbsp;<div class="mapper"><span class="secondary-font">//</span>&nbsp;${cache.creator}`;
+                difflavel.innerHTML = checkUndefined(tokenValue.diffName);
+                totalTime.innerHTML = `(${formatTimeString(formatTime.minute)}:${formatTimeString(formatTime.second)})`;
+                mapper.innerHTML = `&nbsp;<div class="mapper"><span class="secondary-font">//</span>&nbsp;${checkUndefined(tokenValue.creator)}`;
                 difflavel.style.width = 'auto';
                 diff.style.width = 'auto';
                 diffcontainer.style.transition = "all 0s";
@@ -434,9 +440,10 @@ ws.onmessage = (wsEvent) => {
                 let modImg = document.createElement('img');
                 modImg.setAttribute('src', modsImgs[name]);
                 mods.appendChild(modImg);
-
             });
+
             const modImages = Array.from(document.querySelectorAll('#mods img'));
+
             for (let i = 0; i < modImages.length; i++) {
                 modImages[i].style.zIndex = -i;
             }
@@ -480,7 +487,6 @@ ws.onmessage = (wsEvent) => {
 };
 
 currentBG.onload = () => {
-
     if (loadingBGcount === 1 && currentBG.src === `http://${hostname}:${port}/overlays/paradox/assets/loading.png`) {
         if (skinBG.naturalWidth !== 0) {
             currentBG.src = skinBG.src;
@@ -624,3 +630,7 @@ const audioControl = setInterval(() => {
         audioElement.pause();
     }
 }, 150);
+
+function checkUndefined(value) {
+    return value == undefined ? "Unknown" : value;
+}

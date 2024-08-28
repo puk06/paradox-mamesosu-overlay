@@ -44,13 +44,13 @@ const audioVisualizer = (() => {
         const newG = avg + deltaG * amount;
         const newB = avg + deltaB * amount;
 
-        return [newR, newG, newB].map(value => Math.round(Math.max(Math.min(value, 255), 0)));
+        return [ newR, newG, newB ].map(value => Math.round(Math.max(Math.min(value, 255), 0)));
     }
 
     const particlesColor = new Array(MaxNumX * MaxNumY).fill([0, 0, 0, 0]);
     const gl_v = visualizer.getContext('webgl2');
 
-    const VISUALIZER_VERTEX_SHADER_SOURCE = 
+    const VISUALIZER_VERTEX_SHADER_SOURCE =
         `#version 300 es
 
         out vec2 vVertexPosition;
@@ -200,7 +200,8 @@ const audioVisualizer = (() => {
     if (saved.enableAudioVisualizer === true && gl_v) {
         renderVisualizer();
     }
+    
     return {
         renderVisualizer: renderVisualizer
-    }
+    };
 })();

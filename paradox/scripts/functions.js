@@ -100,7 +100,6 @@ function calculateLuminanceFactor(rgb) {
     const [R, G, B] = rgb;
     const brightness = (0.2126 * R + 0.7152 * G + 0.0722 * B) / 255;
     const LuminanceFactor = (-2 / 3) * brightness + 1
-    //const LuminanceFactor = brightness ** 2 - 2.5 * brightness + 2;
     return LuminanceFactor;
 }
 
@@ -136,9 +135,7 @@ function average(img) {
     backgroundLuminanceFactor = calculateLuminanceFactor(blendColor);
 
     let rgb = adjustRgb;
-    if (rgb[0] + rgb[1] + rgb[2] == 0) {
-
-    } else {
+    if ((rgb[0] + rgb[1] + rgb[2]) !== 0) {
         for (;;) {
             if (rgb[0] + rgb[1] + rgb[2] > 255) {
                 break;
@@ -159,20 +156,11 @@ function coordinate(image, colorAmount) {
     const ctx = canvas.getContext('2d');
     const saturate = 100 + (saved.background.blur * 5);
     ctx.filter = `saturate(${saturate}%)`;
-
-    let maskColor;
-
-    if (saved.enableCustomColor === true) {
-        maskColor = saved.customColor;
-    } else {
-        maskColor = averageColor;
-    }
+    const maskColor = saved.enableCustomColor ? saved.customColor : averageColor;
 
     ctx.drawImage(image, 0, 0);
 
-    ctx.fillStyle = `rgba(${Math.min(Math.max(maskColor[0], 0), 255)}, 
-                         ${Math.min(Math.max(maskColor[1], 0), 255)}, 
-                         ${Math.min(Math.max(maskColor[2], 0), 255)}, ${colorAmount})`;
+    ctx.fillStyle = `rgba(${Math.min(Math.max(maskColor[0], 0), 255)}, ${Math.min(Math.max(maskColor[1], 0), 255)}, ${Math.min(Math.max(maskColor[2], 0), 255)}, ${colorAmount})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (saved.background.normalizeBrightness === true)
         ctx.fillStyle = `rgba(0, 0, 0, ${1 - (saved.background.opacity / 100 * backgroundLuminanceFactor)})`;
@@ -185,12 +173,11 @@ function coordinate(image, colorAmount) {
 }
 
 async function fade(targetCanvas, to, duration, RGBA = false) {
-
     await Promise.all([
         to.onload ? to.onload : Promise.resolve()
     ]);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const from = saveCanvas(targetCanvas);
         const ctx_targetCanvas = targetCanvas.getContext('2d');
         let startTime;
@@ -225,7 +212,7 @@ async function fade(targetCanvas, to, duration, RGBA = false) {
 }
 
 function colorFade(targetColor, duration) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         initialColor = accentColor;
         if (firstLoad) {
             initialColor = targetColor = [100, 100, 100];
@@ -260,7 +247,6 @@ function colorFade(targetColor, duration) {
 }
 
 function resizeImage(img, width, height) {
-
     const imgWidth = img.naturalWidth;
     const imgHeight = img.naturalHeight;
     const canvas = document.createElement('canvas');
@@ -268,10 +254,10 @@ function resizeImage(img, width, height) {
     canvas.height = height;
     const ctx = canvas.getContext('2d');
 
-    if ((imgWidth * height / width) < imgHeight) { //指定した解像度より縦長の場合
+    if ((imgWidth * height / width) < imgHeight) {
         const aspectError = (imgHeight - (imgWidth * height / width)) / 2;
         ctx.drawImage(img, 0, aspectError, imgWidth, (imgWidth * height / width), 0, 0, width, height);
-    } else { //指定した解像度より横長の場合
+    } else {
         const aspectError = (imgWidth - (imgHeight * width / height)) / 2;
         ctx.drawImage(img, aspectError, 0, (imgHeight * width / height), imgHeight, 0, 0, width, height);
     }
@@ -296,6 +282,7 @@ function hideGameUIRefresh() {
     const keyHeight = 120;
     ctx.reset();
     ctx.fillStyle = "#000000";
+
     if (saved.timing.hideGameUI === true) {
         ctx.beginPath();
         ctx.arc(canvas.width / 2 - timingWidth / 2, canvas.height, timingHeight, 0, Math.PI * 2);
@@ -303,6 +290,7 @@ function hideGameUIRefresh() {
         ctx.fill();
         ctx.fillRect(canvas.width / 2 - timingWidth / 2, canvas.height - timingHeight, timingWidth, timingHeight);
     }
+
     if (saved.key.hideGameUI === true) {
         ctx.beginPath();
         ctx.arc(canvas.width, canvas.height / 2 + 55 - keyWidth / 2, keyHeight, 0, Math.PI * 2);
@@ -310,5 +298,6 @@ function hideGameUIRefresh() {
         ctx.fill();
         ctx.fillRect(canvas.width - keyHeight, canvas.height / 2 - keyWidth / 2, keyHeight, keyWidth);
     }
+
     shader.applyShaderToCanvas(canvas, 5, 5);
 }

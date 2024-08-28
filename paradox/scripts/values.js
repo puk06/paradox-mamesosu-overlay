@@ -153,38 +153,57 @@ const modsImgs = {
     'None': './assets/nomod.png',
     'Nomod': './assets/nomod.png',
     'NM': './assets/nomod.png',
+
     'EZ': './assets/easy.png',
     'Easy': './assets/easy.png',
+
     'NF': './assets/nofail.png',
     'No Fail': './assets/nofail.png',
+
     'HT': './assets/halftime.png',
     'Half Time': './assets/halftime.png',
+
     'HR': './assets/hardrock.png',
     'Hard Rock': './assets/hardrock.png',
+
     'SD': './assets/suddendeath.png',
     'Sudden Death': './assets/suddendeath.png',
+
     'PF': './assets/perfect.png',
     'Perfect': './assets/perfect.png',
+
     'DT': './assets/doubletime.png',
     'Double Time': './assets/doubletime.png',
+
     'NC': './assets/nightcore.png',
     'Nightcore': './assets/nightcore.png',
+
     'HD': './assets/hidden.png',
     'Hidden': './assets/hidden.png',
+
     'FL': './assets/flashlight.png',
     'Flashlight': './assets/flashlight.png',
+
     'RX': './assets/relax.png',
     'Relax': './assets/relax.png',
+
     'AP': './assets/autopilot.png',
     'AutoPilot': './assets/autopilot.png',
+
     'SO': './assets/spunout.png',
     'Spun Out': './assets/spunout.png',
+
     'AU': './assets/autoplay.png',
     'AutoPlay': './assets/autoplay.png',
+
     'CN': './assets/none.png',
     'Cinema': './assets/none.png',
+
     'SV2': './assets/v2.png',
-    'Score V2': './assets/v2.png'
+    'Score V2': './assets/v2.png',
+
+    'LM': './assets/mirror.png',
+    'Mirror': './assets/mirror.png'
 };
 
 const gradeImgs = {
@@ -235,7 +254,6 @@ let cacheUserData = {
     accuracy: '',
     country: '',
     pp_country_rank: '',
-    accuracy: '',
     playcount: '',
     join_date: '',
     level: '',
@@ -250,7 +268,6 @@ let cache = {
         fullPath: ''
     },
     modsArray: null,
-    /*The property name must be a valid token name. These will also be used for requests to websocket.*/
     username: '',
     artistRoman: '',
     artistUnicode: '',

@@ -79,7 +79,7 @@ a {
   font-size: 0.4rem;
 }
 
-#apikey {
+#api {
   position: relative;
   font-size: 0.5rem;
   color: #ffffff;
@@ -90,7 +90,7 @@ a {
   cursor: pointer;
 }
 
-#apikey:hover {
+#api:hover {
   background-color: #606060;
 }
 

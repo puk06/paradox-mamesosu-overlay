@@ -54,6 +54,7 @@ function drawKeyOverlay() {
         document.documentElement.style.setProperty('--keyoffsetY', key.offsetY + 'px');
         document.documentElement.style.setProperty('--keyfontsize', key.thickness * 0.0075 + 'rem');
         document.documentElement.style.setProperty('--keyradius', key.thickness / 5 + 'px');
+
         if (key.merge === true) {
             keyName = ['B1', 'B2'];
             keyCanvas.height = keyCanvasCache.height = key.thickness * 2 + key.margin;
@@ -64,6 +65,7 @@ function drawKeyOverlay() {
             document.documentElement.style.setProperty('--keyheight', `${key.thickness * 4 + key.margin * 3}px`);
             document.documentElement.style.setProperty('--keymerge', `visible`);
         }
+
         if (key.invert === true) {
             keyName.reverse();
         }
@@ -86,23 +88,28 @@ function drawKeyOverlay() {
         speed = Math.max(Math.round(6 * tokenValue.currentBpm / 200), 2);
         let keyStatus = [tokenValue.K1Pressed, tokenValue.K2Pressed, tokenValue.M1Pressed, tokenValue.M2Pressed];
         let keyCount = [tokenValue.K1Count, tokenValue.K2Count, tokenValue.M1Count, tokenValue.M2Count];
+
         if (key.invert === true) {
             keyStatus.reverse();
             keyCount.reverse();
         }
+
         if (key.merge === true) {
             keyStatus = [(keyStatus[0] || keyStatus[2]), (keyStatus[1] || keyStatus[3])];
             keyCount = [keyCount[0] + keyCount[2], keyCount[1] + keyCount[3]];
         }
+
         if (key.all === true) {
             document.getElementById('keycounts').style.opacity = 1;
         } else {
             document.getElementById('keycounts').style.opacity = 0;
         }
+
         ctx_keyCache.fillStyle = "rgb(255, 255, 255)";
         ctx_keyCache.globalCompositeOperation = 'copy';
         ctx_keyCache.drawImage(keyCanvasCache, -speed, 0, keyCanvas.width, keyCanvas.height);
         ctx_keyCache.globalCompositeOperation = 'source-over';
+
         for (let i = 0; i < keyStatus.length; i++) {
             if (keyStatus[i] === true) {
                 ctx_keyCache.fillRect(keyCanvas.width - speed, key.thickness * i + key.margin * i, speed, key.thickness);
@@ -150,6 +157,7 @@ function drawKeyOverlay() {
             requestAnimationFrame(loop);
         }
     }
+    
     initializeVariables();
     setupVariables();
     createGradient();

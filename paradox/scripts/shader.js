@@ -130,9 +130,7 @@ const shader = (() => {
     const screenUniforms = getUniformLocations(gl, screenProgram, ['u_texture', 'u_alpha']);
     const blurUniforms = getUniformLocations(gl, blurProgram, ['u_texture', 'u_horizontal', 'u_sampleStep']);
 
-
     const applyShaderToCanvas = function(destinationCanvas, reductionRate, radius, alpha = 1.0, screen = false) {
-
         const blurWidth = Math.ceil(destinationCanvas.width / reductionRate);
         const blurHeight = Math.ceil(destinationCanvas.height / reductionRate);
         const sampleStep = 1;
@@ -141,9 +139,9 @@ const shader = (() => {
         let blurFbObjR = createFramebuffer(gl, blurWidth, blurHeight);
         let blurFbObjW = createFramebuffer(gl, blurWidth, blurHeight);
         const swapBlurFbObj = function() {
-        const tmp = blurFbObjR;
-        blurFbObjR = blurFbObjW;
-        blurFbObjW = tmp;
+            const tmp = blurFbObjR;
+            blurFbObjR = blurFbObjW;
+            blurFbObjW = tmp;
         };
     
         const renderToReductionBuffer = function() {
@@ -159,20 +157,20 @@ const shader = (() => {
         const applyBlur = function() {
             gl.viewport(0.0, 0.0, blurFbObjW.width, blurFbObjW.height);
             gl.useProgram(blurProgram);
-
             gl.uniform1i(blurUniforms['u_sampleStep'], sampleStep);
-            for (let i = 0; i < radius; i++) {
-            gl.bindFramebuffer(gl.FRAMEBUFFER, blurFbObjW.framebuffer);
-            setUniformTexture(gl, 0, blurFbObjR.texture, blurUniforms['u_texture']);
-            gl.uniform1f(blurUniforms['u_horizontal'], true);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            swapBlurFbObj();
 
-            gl.bindFramebuffer(gl.FRAMEBUFFER, blurFbObjW.framebuffer);
-            setUniformTexture(gl, 0, blurFbObjR.texture, blurUniforms['u_texture']);
-            gl.uniform1f(blurUniforms['u_horizontal'], false);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            swapBlurFbObj();
+            for (let i = 0; i < radius; i++) {
+                gl.bindFramebuffer(gl.FRAMEBUFFER, blurFbObjW.framebuffer);
+                setUniformTexture(gl, 0, blurFbObjR.texture, blurUniforms['u_texture']);
+                gl.uniform1f(blurUniforms['u_horizontal'], true);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                swapBlurFbObj();
+
+                gl.bindFramebuffer(gl.FRAMEBUFFER, blurFbObjW.framebuffer);
+                setUniformTexture(gl, 0, blurFbObjR.texture, blurUniforms['u_texture']);
+                gl.uniform1f(blurUniforms['u_horizontal'], false);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                swapBlurFbObj();
             }
             
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -202,7 +200,6 @@ const shader = (() => {
             destCtx.drawImage(canvas, 0, 0, destinationCanvas.width, destinationCanvas.height);
         };
 
-    
         if (reductionRate === 0 && radius === 0) {
             if (screen === true) {
                 applyScreenShader(texture);
@@ -212,16 +209,16 @@ const shader = (() => {
                 copyToCanvas();
             }
         } else if (screen === true) {
-                renderToReductionBuffer();
-                applyBlur();
-                applyScreenShader(blurFbObjR.texture);
-                copyToCanvas();
-            } else {
-                renderToReductionBuffer();
-                applyBlur();
-                restoreFromTexture(blurFbObjR.texture);
-                copyToCanvas();
-            }
+            renderToReductionBuffer();
+            applyBlur();
+            applyScreenShader(blurFbObjR.texture);
+            copyToCanvas();
+        } else {
+            renderToReductionBuffer();
+            applyBlur();
+            restoreFromTexture(blurFbObjR.texture);
+            copyToCanvas();
+        }
     };
     return {
         applyShaderToCanvas: applyShaderToCanvas
