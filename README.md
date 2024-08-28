@@ -7,9 +7,12 @@
 日本語の説明は[こちら](./README_JP.md)
 
 ## Overview
-This is a browser-based overlay created to enhance the appearance of your osu! streaming screen. Please feel free to use this for your streams or replay recordings! (This does not alter the actual gameplay screen.)
+This is a browser-based overlay that has been improved for use with the private server Mamestagram, and has various other features added!
+
+Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 
 ## Differences from the Original paradox
+- Displays data from the Mamestagram server (not compatible with Bancho)
 - Unified code indentation
 - UR notation (not only NM conversion, but also DT UR display)
 - Added Mania's Mirror Mod

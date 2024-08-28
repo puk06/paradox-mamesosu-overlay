@@ -4,9 +4,12 @@
 <img src="./sample3.png" width="48%"> <img src="./sample4.png" width="48%">
 
 ## 概要
-こちらはosu!の配信画面を華やかにするために作成したブラウザベースのオーバーレイです。ぜひ配信やリプレイの録画などにご活用ください！（実際のゲーム画面を変更するものではありません。）
+こちらはプライベートサーバー、Mamestagram専用に改良、その他様々な機能を追加したブラウザベースのオーバーレイです！
+
+フォーク元: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 
 ## 本来のparadoxとの違い
+- Mamestagramサーバーのデータを取得し表示。(Banchoには対応していません)
 - コードのインデントを統一
 - UR表記（NM変換だけでなく、DTのUR表示も）
 - ManiaのMirror Modを追加
