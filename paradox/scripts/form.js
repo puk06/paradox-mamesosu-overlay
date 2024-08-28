@@ -331,7 +331,6 @@ function GetLevelPrecise(score) {
 }
 
 function initializeSetting() {
-    document.getElementById('apikey').value = saved.apiKey;
     document.getElementById('enableaudiocapture').checked = saved.enableAudioCapture;
     document.getElementById('enableaudiovisualizer').checked = saved.enableAudioVisualizer;
     document.getElementById('enableaudiovisualizer').dispatchEvent(new Event('change'));
