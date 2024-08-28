@@ -3,16 +3,6 @@
 <img src="./sample1.png" width="48%"> <img src="./sample2.png" width="48%">
 <img src="./sample3.png" width="48%"> <img src="./sample4.png" width="48%">
 
-このオーバーレイを使うには、MamestagramIDとGameModeが必要です！
-
-paradox/scripts/Form.jsの157、158行目を自分が表示したいものに変更してください！
-
-const MamestagramId = "257";
-
-const MamestagramGameMode = "1";
-
-これの数字の部分を変えることで動作を変更できます！
-
 
 日本語の説明は[こちら](./README_JP.md)
 
