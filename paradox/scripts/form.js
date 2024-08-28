@@ -2,20 +2,17 @@ if (navigator.language === "ja-JP" && !window.location.href.includes("JP")) {
     window.location.href = window.location.href + encodeURIComponent("index_JP.html");
 }
 
-function checkUpdate() {
+async function checkUpdate() {
     document.getElementById('version').innerHTML = version;
-    fetch('https://api.github.com/repos/mofuries/paradox-osu-overlay/releases/latest')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.tag_name);
-        if (version === data.tag_name){
-            console.log("up-to-date.");
-            document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #ccff99;">&nbsp;(up-to-date.)</span>`;
-        } else {
-            console.log("update is available.");
-            document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #cc99ff;">&nbsp;(update is available.)</span>`;
-        }
-    });
+    const response = await fetch('https://api.github.com/repos/puk06/paradox-mamesosu-overlay/releases/latest');
+    const data = await response.json();
+    if (version === data.tag_name) {
+        console.log("up-to-date.");
+        document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #ccff99;">&nbsp;(up-to-date.)</span>`;
+    } else {
+        console.log("update is available.");
+        document.getElementById('version').innerHTML = version + `<span id="islatest" style="color: #cc99ff;">&nbsp;(update is available.)</span>`;
+    }
 }
 
 function setLocal(variableName, variableValue) {
@@ -37,7 +34,7 @@ function getLocal(variableName) {
 }
 
 function getLocalAll() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         for (let key in saved) {
             const value = getLocal(key);
             if (value !== null) {
@@ -65,100 +62,85 @@ function displayLocalStorage() {
     }
 }
 
-function getUserData(user = tokenValue.banchoId) {
-    if (saved.apiKey !== null) {
-        const apiUrl = `https://osu.ppy.sh/api/get_user?k=${saved.apiKey}&u=${encodeURIComponent(user)}`;
-        return fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            let userData = '';
-            data.forEach(user => {
-                for (const key in user) {
-                    if (cacheUserData.hasOwnProperty(key)) {
-                        userData += key + ': ' + user[key] + '<br>';
-                        cacheUserData[key] = user[key];
-                    }
-                }
-            });
-            document.getElementById('apiconnect').style.color = "#99ccff";
-            document.getElementById('apiconnect').innerHTML = "Connected.";
-            return userData;
-        })
-        .catch(error => {
-            document.getElementById('apiconnect').style.color = "#ff99cc";
-            document.getElementById('apiconnect').innerHTML = "Failed. Wrong key?";
-            console.error('Error fetching data:', error);
-        });
-    } else {
-        return Promise.resolve('');
+async function getMamestagramData(username = tokenValue.banchoId, gamemode = "0") {
+    if (username === "" || username == null) {
+        username = tokenValue.banchoId;
     }
+
+    let apiUrl = `https://api.mamesosu.net/v1/get_player_info?id=${username}&scope=all`;
+    if (!/^\d+$/.test(username)) {
+        username = username
+            .replace(/\[.*?\]/g, '')
+            .trim();
+        username = encodeURIComponent(username);
+        apiUrl = `https://api.mamesosu.net/v1/get_player_info?name=${username}&scope=all`;
+    }
+
+    const response = await fetch(apiUrl);
+    let data = await response.json();
+
+    if (data.player === null) throw new Error('User not found.');
+
+    const date = new Date(data.player.info.creation_time * 1000);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+    const join_date = `${year}-${addZero(month)}-${addZero(day)} ${addZero(hour)}:${addZero(minute)}:${addZero(second)}`;
+
+    const currentLevel = GetLevelPrecise(data.player.stats[gamemode].tscore);
+
+    const apiData = {
+            "user_id": data.player.info.id,
+            "username": data.player.info.name,
+            "join_date": join_date,
+            "playcount": data.player.stats[gamemode].plays,
+            "ranked_score": data.player.stats[gamemode].rscore,
+            "total_score": data.player.stats[gamemode].tscore,
+            "pp_rank": data.player.stats[gamemode].rank,
+            "level": Math.round(currentLevel * 10000) / 10000,
+            "pp_raw": data.player.stats[gamemode].pp,
+            "accuracy": data.player.stats[gamemode].acc,
+            "count_rank_ss": data.player.stats[gamemode].x_count,
+            "count_rank_ssh": data.player.stats[gamemode].xh_count,
+            "count_rank_s": data.player.stats[gamemode].s_count,
+            "count_rank_sh": data.player.stats[gamemode].sh_count,
+            "count_rank_a": data.player.stats[gamemode].a_count,
+            "country": data.player.info.country.toUpperCase(),
+            "total_seconds_played": data.player.stats[gamemode].playtime,
+            "pp_country_rank": data.player.stats[gamemode].country_rank,
+            "events": []
+    };
+
+    for (const key in apiData) {
+        if (cacheUserData.hasOwnProperty(key)) {
+            cacheUserData[key] = apiData[key];
+        }
+    }
+    
+    document.getElementById('apiconnect').style.color = "#99ccff";
+    document.getElementById('apiconnect').innerHTML = "Connected." + username;
 }
 
-function getMamestagramData(user = "1", gamemode = "0") {
-    const apiUrl = `https://api.mamesosu.net/v1/get_player_info?id=${user}&scope=all`;
-
-    return fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            const date = new Date(data.player.info.creation_time * 1000);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            const hour = date.getHours();
-            const minute = date.getMinutes();
-            const second = date.getSeconds();
-            const join_date = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-            const apiData = [
-                {
-                    "user_id": user,
-                    "username": data.player.info.name,
-                    "join_date": join_date,
-                    "playcount": data.player.stats[gamemode].plays,
-                    "ranked_score": data.player.stats[gamemode].rscore,
-                    "total_score": data.player.stats[gamemode].tscore,
-                    "pp_rank": data.player.stats[gamemode].rank,
-                    "level": Math.round(GetLevelPrecise(data.player.stats[gamemode].tscore) * 10000) / 10000,
-                    "pp_raw": data.player.stats[gamemode].pp,
-                    "accuracy": data.player.stats[gamemode].acc,
-                    "count_rank_ss": data.player.stats[gamemode].x_count,
-                    "count_rank_ssh": data.player.stats[gamemode].xh_count,
-                    "count_rank_s": data.player.stats[gamemode].s_count,
-                    "count_rank_sh": data.player.stats[gamemode].sh_count,
-                    "count_rank_a": data.player.stats[gamemode].a_count,
-                    "country": data.player.info.country.toUpperCase(),
-                    "total_seconds_played": data.player.stats[gamemode].playtime,
-                    "pp_country_rank": data.player.stats[gamemode].country_rank,
-                    "events": []
-                }
-            ];
-            data = apiData;
-
-            let userData = '';
-            data.forEach(user => {
-                for (const key in user) {
-                    if (cacheUserData.hasOwnProperty(key)) {
-                        userData += key + ': ' + user[key] + '<br>';
-                        cacheUserData[key] = user[key];
-                    }
-                }
-            });
-            document.getElementById('apiconnect').style.color = "#99ccff";
-            document.getElementById('apiconnect').innerHTML = "Connected.";
-            return userData;
-        });
-}
-
-function reloadUserData(user = tokenValue.banchoId) {
+function reloadUserData(username = tokenValue.banchoId) {
     isPlaying = false;
-    if (tokenValue.osuIsRunning === 0) {
-        return;
+
+    if (username === "osu!") {
+        username = tokenValue.banchoId;
     }
 
-    const MamestagramId = "257";
-    const MamestagramGameMode = "1";
+    if (username == null) {
+        username = "";
+    }
 
-    getMamestagramData(MamestagramId, MamestagramGameMode)
-        .then(userData => {
+    if (tokenValue.osuIsRunning === 0) return;
+
+    const mode = tokenValue.mode;
+
+    getMamestagramData(username, mode)
+        .then(() => {
             validUserdata = true;
             panelImage.src = `https://a.mamesosu.net/${cacheUserData.user_id}`;
             showElement([avatar]);
@@ -189,6 +171,8 @@ function reloadUserData(user = tokenValue.banchoId) {
             }, 250);
         })
         .catch(error => {
+            document.getElementById('apiconnect').style.color = "#ff99cc";
+            document.getElementById('apiconnect').innerHTML = "Failed;-; Server down?";
             validUserdata = false;
             analyzerHide();
             console.error('Error:', error);
@@ -294,11 +278,11 @@ function hideElement(elements) {
 }
 
 function dataURLtoBlob(dataURL) {
-    var arr = dataURL.split(',');
-    var mime = arr[0].match(/:(.*?);/)[1];
-    var bstr = atob(arr[1]);
-    var n = bstr.length;
-    var u8arr = new Uint8Array(n);
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
@@ -406,6 +390,24 @@ function initializeSetting() {
     document.getElementById('urposition2').checked = (saved.timing.urPosition === 'bottom');
 }
 
+function addZero(num) {
+    return num < 10 ? '0' + num : num;
+}
+
+function addCommasToNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const inputText = document.getElementById('apikey').value;
+        saved.apiKey = inputText;
+        setLocal('apiKey', saved.apiKey);
+        reloadUserData();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     checkUpdate();
     getLocalAll()
@@ -433,39 +435,29 @@ document.getElementById('Dontshow').addEventListener('change', function(event) {
     }
 });
 
-function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const inputText = document.getElementById('apikey').value;
-        saved.apiKey = inputText;
-        setLocal('apiKey', saved.apiKey);
-        reloadUserData();
-    }
-}
-
 document.getElementById('custompanelbg').addEventListener("change", function(event) {
     const file = document.getElementById('custompanelbg').files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const dataURL = event.target.result;
-        const base64Data = dataURL.split(",")[1];
-        const dataURLwithFilename = `data:${file.type};filename=${file.name};base64,${base64Data}`;
-        const result = setImageToLocal('customImage', dataURLwithFilename);
-        document.getElementById('wrap').style.opacity = 1;
-        if (result === true) {
-            document.getElementById('custompanelbgfilename').style.color = "#fff";
-            document.getElementById('custompanelbgfilename').innerHTML = file.name;
-            saved.customImage = dataURLwithFilename;
-            customImage.src = saved.customImage;
-        } else {
-            document.getElementById('custompanelbgfilename').style.color = "#ff5555";
-            document.getElementById('custompanelbgfilename').innerHTML = "File size is too large.";
-        }
-      };
-      reader.readAsDataURL(file);
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const dataURL = event.target.result;
+            const base64Data = dataURL.split(",")[1];
+            const dataURLwithFilename = `data:${file.type};filename=${file.name};base64,${base64Data}`;
+            const result = setImageToLocal('customImage', dataURLwithFilename);
+            document.getElementById('wrap').style.opacity = 1;
+            if (result === true) {
+                document.getElementById('custompanelbgfilename').style.color = "#fff";
+                document.getElementById('custompanelbgfilename').innerHTML = file.name;
+                saved.customImage = dataURLwithFilename;
+                customImage.src = saved.customImage;
+            } else {
+                document.getElementById('custompanelbgfilename').style.color = "#ff5555";
+                document.getElementById('custompanelbgfilename').innerHTML = "File size is too large.";
+            }
+        };
+        reader.readAsDataURL(file);
     }
-  });
+});
 
 document.getElementById('custompanelbgreset').addEventListener('click', event => {
     event.preventDefault();
@@ -495,12 +487,13 @@ document.getElementById('continue').addEventListener('click', function(event) {
 
 document.addEventListener("mousedown", function(event) {
     if (!event.target.closest("#setting") && !event.target.closest("#profiledetail") && !event.target.closest("#profilewrapper") && document.getElementById('startup').style.opacity == 0) {
-      if (settingVisible === true) {
-        settingHide();
-      } else {
-        settingShow();
-      }
+        if (settingVisible === true) {
+            settingHide();
+        } else {
+            settingShow();
+        }
     }
+
     if (event.target.closest("#profilewrapper") && cache.rawStatus !== 2 && document.getElementById('startup').style.opacity == 0) {
         if (document.getElementById('profiledetail').style.height === '305px') {
             document.getElementById('profiledetail').style.height = '100px';
@@ -510,6 +503,7 @@ document.addEventListener("mousedown", function(event) {
             document.getElementById('profiledetail').style.borderRadius = '20px 20px 20px 20px';
         }
     }
+
     if (event.target.closest("#reset")) {
         Object.keys(cacheUserData).forEach(key => {
             if (saved.cacheUserData.hasOwnProperty(key)) {
@@ -523,35 +517,35 @@ document.addEventListener("mousedown", function(event) {
 
 document.querySelectorAll('.optionbutton').forEach((button, index) => {
     button.addEventListener('click', event => {
-      event.preventDefault();
-      const options = document.querySelectorAll('.option');
-      const option = options[index];
-      const open = "";
-      const close = "";
-      if (button.innerHTML == open) {
-        button.innerHTML = close;
-        optionHide(option);
-      } else if (button.innerHTML == close) {
-        button.innerHTML = open;
-        optionShow(option);
-      }
+        event.preventDefault();
+        const options = document.querySelectorAll('.option');
+        const option = options[index];
+        const open = "";
+        const close = "";
+        if (button.innerHTML == open) {
+            button.innerHTML = close;
+            optionHide(option);
+        } else if (button.innerHTML == close) {
+            button.innerHTML = open;
+            optionShow(option);
+        }
     });
-  });
-  
+});
+
 document.querySelectorAll('input[name="accentColor"]').forEach((radio) => {
-  radio.addEventListener('change', function() {
-    if (this.value === 'custom') {
-        saved.enableCustomColor = true;
-        setLocal('enableCustomColor', saved.enableCustomColor);
-        optionShow(document.getElementById('rgbpalette'));
-        cache.background.fullPath = null;
-    } else {
-        saved.enableCustomColor = false;
-        setLocal('enableCustomColor', saved.enableCustomColor);
-        optionHide(document.getElementById('rgbpalette'));
-        cache.background.fullPath = null;
-    }
-  });
+    radio.addEventListener('change', function() {
+        if (this.value === 'custom') {
+            saved.enableCustomColor = true;
+            setLocal('enableCustomColor', saved.enableCustomColor);
+            optionShow(document.getElementById('rgbpalette'));
+            cache.background.fullPath = null;
+        } else {
+            saved.enableCustomColor = false;
+            setLocal('enableCustomColor', saved.enableCustomColor);
+            optionHide(document.getElementById('rgbpalette'));
+            cache.background.fullPath = null;
+        }
+    });
 });
 
 document.querySelectorAll('.colorsliders').forEach(slider => {
@@ -774,8 +768,6 @@ document.getElementById('enablevoid').addEventListener('change', function(event)
         setTimeout(() => {
             this.checked = false;
         }, 250);
-    } else {
-
     }
 });
 
@@ -867,18 +859,14 @@ document.querySelectorAll('.keysliders').forEach(slider => {
 
 document.querySelectorAll('input[name="urposition"]').forEach((radio) => {
     radio.addEventListener('change', function() {
-      if (this.value === 'top') {
-        saved.timing.urPosition = 'top';
-      } else if (this.value === 'bottom') {
-        saved.timing.urPosition = 'bottom';
-      }
-      setLocal('timing', saved.timing);
+        if (this.value === 'top') {
+            saved.timing.urPosition = 'top';
+        } else if (this.value === 'bottom') {
+            saved.timing.urPosition = 'bottom';
+        }
+        setLocal('timing', saved.timing);
     });
-  });
-
-function addCommasToNumber(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+});
 
 function adjustFontSize(defalutsize) {
     const score = document.getElementById('score');
