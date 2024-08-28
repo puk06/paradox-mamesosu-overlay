@@ -119,9 +119,6 @@ async function getMamestagramData(username = tokenValue.banchoId, gamemode = "0"
             cacheUserData[key] = apiData[key];
         }
     }
-    
-    document.getElementById('apiconnect').style.color = "#99ccff";
-    document.getElementById('apiconnect').innerHTML = "Connected." + username;
 }
 
 function reloadUserData(username = tokenValue.banchoId) {
@@ -169,13 +166,16 @@ function reloadUserData(username = tokenValue.banchoId) {
                     hideElement([document.getElementById('paddingright'), document.getElementById('detailright')]);
                 }
             }, 250);
+
+            document.getElementById('apiconnect').style.color = "#99ccff";
+            document.getElementById('apiconnect').innerHTML = "Connected!";
         })
         .catch(error => {
             document.getElementById('apiconnect').style.color = "#ff99cc";
             document.getElementById('apiconnect').innerHTML = "Failed;-; Server down?";
             validUserdata = false;
             analyzerHide();
-            console.error('Error:', error);
+            console.error('Error: ', error);
         });
 }
 
@@ -396,16 +396,6 @@ function addZero(num) {
 
 function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const inputText = document.getElementById('apikey').value;
-        saved.apiKey = inputText;
-        setLocal('apiKey', saved.apiKey);
-        reloadUserData();
-    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

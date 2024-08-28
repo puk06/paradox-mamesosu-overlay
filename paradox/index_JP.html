@@ -36,12 +36,9 @@
           <span id="version"></span>
 
           <label for="apikey" class="textbox">
-            <span class="label">osu! APIキー</span>
-            <input type="password" id="apikey" onkeydown="handleKeyPress(event)" value="">
-            <span id="apiconnect"></span>
+            <span class="label">Mamestagram APIに接続</span>
+            <button id="apikey" onclick="reloadUserData()">Connect</button>
           </label>
-
-          <div class="commontext small">(osu!のウェブサイトのアカウント設定からレガシーAPIを登録すると入手できます。)</div>
 
           <label for="enableaudiocapture" class="checkbox-label">
             <input type="checkbox" id="enableaudiocapture" name="enableaudiocapture" class="checkbox-input">

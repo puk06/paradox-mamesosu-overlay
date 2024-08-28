@@ -27,7 +27,7 @@ function drawTimingBar() {
         }
     }
 
-      const VariablesEqual = function() {
+    const VariablesEqual = function() {
         const oldTimingObj = timing;
         const newTimingObj = saved.timing;
         const oldObjValue = Object.values(oldTimingObj);
@@ -38,10 +38,7 @@ function drawTimingBar() {
         const newMods = cache.modsArray;
 
         const objIsEqual = oldObjValue.every((value, index) => value === newObjValue[index]);
-        if (!objIsEqual || oldOD !== newOD || oldMods !== newMods) {
-            return false;
-        }
-        return true;
+        return !(!objIsEqual || oldOD !== newOD || oldMods !== newMods);
     }
 
     const initializeVariables = function() {
@@ -163,12 +160,10 @@ function drawTimingBar() {
                     } else {
                         ctx_timing.fillRect(timingCanvas.width / 2 + area300, timingCanvas.height / 2 - hitErrorHeight, area100 - area300, hitErrorHeight - barThickness);
                     }
+                } else if (hitError.offset < 0) {
+                    ctx_timing.fillRect(timingCanvas.width / 2 - area50, timingCanvas.height / 2 - hitErrorHeight, area50 - area100, hitErrorHeight - barThickness);
                 } else {
-                    if (hitError.offset < 0) {
-                        ctx_timing.fillRect(timingCanvas.width / 2 - area50, timingCanvas.height / 2 - hitErrorHeight, area50 - area100, hitErrorHeight - barThickness);
-                    } else {
-                        ctx_timing.fillRect(timingCanvas.width / 2 + area100, timingCanvas.height / 2 - hitErrorHeight, area50 - area100, hitErrorHeight - barThickness);
-                    }
+                    ctx_timing.fillRect(timingCanvas.width / 2 + area100, timingCanvas.height / 2 - hitErrorHeight, area50 - area100, hitErrorHeight - barThickness);
                 }
             }
             hitError.alpha -= 0.02 * timing.speed;
@@ -201,24 +196,25 @@ function drawTimingBar() {
         document.documentElement.style.setProperty('--hiterroraverage', `${average}px`);
         if (currentHitErrors.length > previousHitErrors.length) {
             const addedItems = currentHitErrors.slice(Math.max(previousHitErrors.length - currentHitErrors.length, -5));
-            for (let i = 0; i < addedItems.length; i++) {
+            for (const element of addedItems) {
                 let timingError;
                 if (timing.normalize === true) {
-                    timingError = addedItems[i] * normalizationFactor * timing.size;
+                    timingError = element * normalizationFactor * timing.size;
                 } else {
-                    timingError = addedItems[i] * timing.size;
+                    timingError = element * timing.size;
                 }
                 if (timing.rotate === 180 || timing.rotate === -180 || timing.rotate === -90) {
                     timingError = -(timingError);
                 }
-                const Error = {
+                
+                const TimingErrorObject = {
                     offset: timingError,
                     moved: 0,
                     alpha: 1,
                     delta: 0.3,
                 };
 
-                hitErrors.push(Error);
+                hitErrors.push(TimingErrorObject);
             }
         }
         cache.hitErrors = currentHitErrors;

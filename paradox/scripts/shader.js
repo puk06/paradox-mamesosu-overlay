@@ -211,8 +211,7 @@ const shader = (() => {
                 restoreFromTexture(texture);
                 copyToCanvas();
             }
-        } else {
-            if (screen === true) {
+        } else if (screen === true) {
                 renderToReductionBuffer();
                 applyBlur();
                 applyScreenShader(blurFbObjR.texture);
@@ -223,7 +222,6 @@ const shader = (() => {
                 restoreFromTexture(blurFbObjR.texture);
                 copyToCanvas();
             }
-        }
     };
     return {
         applyShaderToCanvas: applyShaderToCanvas

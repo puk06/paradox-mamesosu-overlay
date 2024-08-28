@@ -3,7 +3,7 @@
     font-style: normal;
     font-weight: 300;
     src: local(''),
-         url('fonts/comfortaa-v29-latin-300.woff') format('woff');
+            url('fonts/comfortaa-v29-latin-300.woff') format('woff');
 }
 @font-face {
     font-family: 'Comfortaa';

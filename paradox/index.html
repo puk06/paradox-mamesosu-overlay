@@ -36,13 +36,10 @@
           <span id="version"></span>
 
           <label for="apikey" class="textbox">
-            <span class="label">osu! API Key</span>
-            <input type="password" id="apikey" onkeydown="handleKeyPress(event)" value="">
-            <span id="apiconnect"></span>
+            <span class="label">Connect Mamestagram API</span>
+            <button id="apikey" onclick="reloadUserData()">Connect</button>
           </label>
-
-          <div class="commontext small">(You can obtain it by registering for the Legacy API from account settings in osu! website.)</div>
-
+          
           <label for="enableaudiocapture" class="checkbox-label">
             <input type="checkbox" id="enableaudiocapture" name="enableaudiocapture" class="checkbox-input">
             <span class="custom-checkbox"></span>
