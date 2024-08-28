@@ -85,8 +85,7 @@ ws.onmessage = (wsEvent) => {
                     showElement([document.getElementById('paddingleft'), document.getElementById('paddingright')]);
                     mods.style.right = box1.scrollWidth + 20 + 'px';
                     let unstableRateValue = tokenValue.convertedUnstableRate;
-                    let modsApplied = cache.mods.split(',');
-                    //mods
+                    const modsApplied = cache.mods.split(',');
                     if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
                         unstableRateValue *= 1.5;
                     }
@@ -111,8 +110,7 @@ ws.onmessage = (wsEvent) => {
         if (isPlaying === true) {
             mods.style.right = box1.scrollWidth + 20 + 'px';
             let unstableRateValue = tokenValue.convertedUnstableRate;
-            let modsApplied = cache.mods.split(',');
-            //mods
+            const modsApplied = cache.mods.split(',');
             if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
                 unstableRateValue *= 1.5;
             }
