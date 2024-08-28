@@ -84,7 +84,14 @@ ws.onmessage = (wsEvent) => {
                     document.documentElement.style.setProperty('--scoresize', '0.75rem');
                     showElement([document.getElementById('paddingleft'), document.getElementById('paddingright')]);
                     mods.style.right = box1.scrollWidth + 20 + 'px';
-                    unstableRate.innerHTML = `${tokenValue.convertedUnstableRate.toFixed(2)}`;
+                    let unstableRateValue = tokenValue.convertedUnstableRate;
+                    let modsApplied = cache.mods.split(',');
+                    //mods
+                    if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
+                        unstableRateValue *= 1.5;
+                    }
+                    unstableRateValue = unstableRateValue.toFixed(2);
+                    unstableRate.innerHTML = unstableRate;
                     item1.innerHTML = `<span id="score">${addCommasToNumber(tokenValue.score)}</span>`;
                     item2.innerHTML = "";
                     item3.innerHTML = `<span id="acc">${tokenValue.acc.toFixed(2)}<span class="colored margin">%</span></span>`;
@@ -103,7 +110,14 @@ ws.onmessage = (wsEvent) => {
         /*pp*/
         if (isPlaying === true) {
             mods.style.right = box1.scrollWidth + 20 + 'px';
-            unstableRate.innerHTML = `${tokenValue.convertedUnstableRate.toFixed(2)}`;
+            let unstableRateValue = tokenValue.convertedUnstableRate;
+            let modsApplied = cache.mods.split(',');
+            //mods
+            if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
+                unstableRateValue *= 1.5;
+            }
+            unstableRateValue = unstableRateValue.toFixed(2);
+            unstableRate.innerHTML = unstableRateValue;
             item1.innerHTML = `<span id="score">${addCommasToNumber(tokenValue.score)}</span>`;
             item2.innerHTML = "";
             item3.innerHTML = `<span id="acc">${tokenValue.acc.toFixed(2)}<span class="colored hilight margin">%</span></span>`;
