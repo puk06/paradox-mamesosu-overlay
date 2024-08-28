@@ -84,12 +84,17 @@ ws.onmessage = (wsEvent) => {
                     document.documentElement.style.setProperty('--scoresize', '0.75rem');
                     showElement([document.getElementById('paddingleft'), document.getElementById('paddingright')]);
                     mods.style.right = box1.scrollWidth + 20 + 'px';
+
                     let unstableRateValue = tokenValue.convertedUnstableRate;
                     const modsApplied = cache.mods.split(',');
+
                     if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
                         unstableRateValue *= 1.5;
+                        unstableRateValue = `${unstableRateValue.toFixed(2)} (${tokenValue.convertedUnstableRate.toFixed(2)})`;
+                    } else {
+                        unstableRateValue = unstableRateValue.toFixed(2);
                     }
-                    unstableRateValue = unstableRateValue.toFixed(2);
+
                     unstableRate.innerHTML = unstableRate;
                     item1.innerHTML = `<span id="score">${addCommasToNumber(tokenValue.score)}</span>`;
                     item2.innerHTML = "";
@@ -109,12 +114,17 @@ ws.onmessage = (wsEvent) => {
         /*pp*/
         if (isPlaying === true) {
             mods.style.right = box1.scrollWidth + 20 + 'px';
+
             let unstableRateValue = tokenValue.convertedUnstableRate;
             const modsApplied = cache.mods.split(',');
+
             if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
                 unstableRateValue *= 1.5;
+                unstableRateValue = `${unstableRateValue.toFixed(2)} (${tokenValue.convertedUnstableRate.toFixed(2)})`;
+            } else {
+                unstableRateValue = unstableRateValue.toFixed(2);
             }
-            unstableRateValue = unstableRateValue.toFixed(2);
+
             unstableRate.innerHTML = unstableRateValue;
             item1.innerHTML = `<span id="score">${addCommasToNumber(tokenValue.score)}</span>`;
             item2.innerHTML = "";
@@ -146,6 +156,21 @@ ws.onmessage = (wsEvent) => {
                     }, 10);
                 } else {
                     combo.innerHTML = comboflash.innerHTML = '';
+                }
+            }
+            //liveStarRatingをSRにする
+
+            const liveStarsParts = tokenValue.liveStarRating.toFixed(2).split(".");
+            const liveStarsInteger = liveStarsParts[0];
+            const liveStarsDecimal = liveStarsParts[1];
+            SR.innerHTML = `${liveStarsInteger}<span id="dot">.</span><span id="srdecimal">${liveStarsDecimal}</span>`;
+            const liveStarsValue = parseFloat(tokenValue.liveStarRating.toFixed(2));
+            
+            for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
+                if (liveStarsValue >= threshold) {
+                    document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
+                    document.documentElement.style.setProperty('--mtextcolor', mtextcolor);
+                    break;
                 }
             }
         }
@@ -367,7 +392,19 @@ ws.onmessage = (wsEvent) => {
                 const mStarsInteger = mStarsParts[0];
                 const mStarsDecimal = mStarsParts[1];
 
-                SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
+                if (!isPlaying) {
+                    SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
+                    const mStarsValue = parseFloat(tokenValue.mStars.toFixed(2));
+                    
+                    for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
+                        if (mStarsValue >= threshold) {
+                            document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
+                            document.documentElement.style.setProperty('--mtextcolor', mtextcolor);
+                            break;
+                        }
+                    }
+                }
+
                 mapdetail.style.transition = "all 0s";
                 mapdetail.style.transform = "translateY(-100%)";
 
@@ -376,37 +413,6 @@ ws.onmessage = (wsEvent) => {
                     mapdetail.style.opacity = 1;
                     mapdetail.style.transform = "translateY(0%)";
                 }, 30);
-
-                /*srcolor*/
-                const colors = [
-                    { threshold: 10, mdiffcolor: "#222222", mtextcolor: "#f7d45c" },
-                    { threshold: 9, mdiffcolor: "#361018", mtextcolor: "#f7d45c" },
-                    { threshold: 8, mdiffcolor: "#181852", mtextcolor: "#f7d45c" },
-                    { threshold: 7.5, mdiffcolor: "#26257f", mtextcolor: "#f7d45c" },
-                    { threshold: 7, mdiffcolor: "#312f9f", mtextcolor: "#f7d45c" },
-                    { threshold: 6.5, mdiffcolor: "#4942b3", mtextcolor: "#f7d45c" },
-                    { threshold: 6, mdiffcolor: "#7d4ec2", mtextcolor: "#ffffff" },
-                    { threshold: 5.5, mdiffcolor: "#c351da", mtextcolor: "#ffffff" },
-                    { threshold: 5, mdiffcolor: "#fb588e", mtextcolor: "#ffffff" },
-                    { threshold: 4.5, mdiffcolor: "#ff646c", mtextcolor: "#ffffff" },
-                    { threshold: 4, mdiffcolor: "#fe9267", mtextcolor: "#ffffff" },
-                    { threshold: 3.5, mdiffcolor: "#fcb764", mtextcolor: "#ffffff" },
-                    { threshold: 3, mdiffcolor: "#e4fa53", mtextcolor: "#ffffff" },
-                    { threshold: 2.5, mdiffcolor: "#7cfa53", mtextcolor: "#ffffff" },
-                    { threshold: 2, mdiffcolor: "#3fd6af", mtextcolor: "#ffffff" },
-                    { threshold: 1, mdiffcolor: "#4fd0f5", mtextcolor: "#ffffff" },
-                    { threshold: 0, mdiffcolor: "#469efc", mtextcolor: "#ffffff" }
-                ];
-                
-                const mStarsValue = parseFloat(tokenValue.mStars.toFixed(2));
-                
-                for (const { threshold, mdiffcolor, mtextcolor } of colors) {
-                    if (mStarsValue >= threshold) {
-                        document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
-                        document.documentElement.style.setProperty('--mtextcolor', mtextcolor);
-                        break;
-                    }
-                }
             }, 200);
         }
 

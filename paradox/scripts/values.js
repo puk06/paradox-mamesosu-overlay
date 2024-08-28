@@ -145,6 +145,27 @@ const avatar = document.getElementById('avatar');
 const clock = document.getElementById('clock');
 const ctx_clock = clock.getContext('2d');
 
+/*srcolor*/
+const SRColors = [
+    { threshold: 10, mdiffcolor: "#222222", mtextcolor: "#f7d45c" },
+    { threshold: 9, mdiffcolor: "#361018", mtextcolor: "#f7d45c" },
+    { threshold: 8, mdiffcolor: "#181852", mtextcolor: "#f7d45c" },
+    { threshold: 7.5, mdiffcolor: "#26257f", mtextcolor: "#f7d45c" },
+    { threshold: 7, mdiffcolor: "#312f9f", mtextcolor: "#f7d45c" },
+    { threshold: 6.5, mdiffcolor: "#4942b3", mtextcolor: "#f7d45c" },
+    { threshold: 6, mdiffcolor: "#7d4ec2", mtextcolor: "#ffffff" },
+    { threshold: 5.5, mdiffcolor: "#c351da", mtextcolor: "#ffffff" },
+    { threshold: 5, mdiffcolor: "#fb588e", mtextcolor: "#ffffff" },
+    { threshold: 4.5, mdiffcolor: "#ff646c", mtextcolor: "#ffffff" },
+    { threshold: 4, mdiffcolor: "#fe9267", mtextcolor: "#ffffff" },
+    { threshold: 3.5, mdiffcolor: "#fcb764", mtextcolor: "#ffffff" },
+    { threshold: 3, mdiffcolor: "#e4fa53", mtextcolor: "#ffffff" },
+    { threshold: 2.5, mdiffcolor: "#7cfa53", mtextcolor: "#ffffff" },
+    { threshold: 2, mdiffcolor: "#3fd6af", mtextcolor: "#ffffff" },
+    { threshold: 1, mdiffcolor: "#4fd0f5", mtextcolor: "#ffffff" },
+    { threshold: 0, mdiffcolor: "#469efc", mtextcolor: "#ffffff" }
+];
+
 virtual.width = 10;
 virtual.height = 10;
 
@@ -311,6 +332,7 @@ let cache = {
     mods: 0,
     mp3Name: 0,
     mStars: 0,
+    liveStarRating: 0,
     rankedStatus: 0,
     rawStatus: 0,
     totalAudioTime: 0,
