@@ -31,4 +31,4 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 3. Right-click the newly added browser source in OBS, and select **Interact**. A new window will open. Click inside this window to access the settings screen.
 
 ## Support
-If you have any questions, feel free to DM me on X(Overlay Dev: [(@mk_cou)](https://x.com/mk_cou), Mamestagram Stats: [(@Hoshino2__)(https://x.com/Hoshino2__)]). However, please note that my English isn't very good, so I appreciate your understanding.
+If you have any questions, feel free to DM me on X(Overlay Dev: [(@mk_cou)](https://x.com/mk_cou), Mamestagram Stats: [(@Hoshino2__)](https://x.com/Hoshino2__)). However, please note that my English isn't very good, so I appreciate your understanding.
