@@ -9,6 +9,12 @@
 ## Overview
 This is a browser-based overlay created to enhance the appearance of your osu! streaming screen. Please feel free to use this for your streams or replay recordings! (This does not alter the actual gameplay screen.)
 
+## Differences from the Original paradox
+- Unified code indentation
+- UR notation (not only NM conversion, but also DT UR display)
+- Added Mania's Mirror Mod
+- Display real-time SR during play
+
 ## How to Use (with OBS Studio)
 ### Required Installations
 - [OBS Studio (Open Broadcaster Software®)](https://obsproject.com/)
