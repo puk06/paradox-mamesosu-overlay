@@ -70,12 +70,15 @@ ws.onmessage = (wsEvent) => {
                 background.classList = "";
                 showElement([visualizer, mods, gameOverlay, grade, pp, document.getElementById('progress'), document.getElementById('uihide')]);
                 hideElement([avatar, document.getElementById('paddingleft'), document.getElementById('paddingright')]);
+
                 if (keyOverlayRunning === false) {
                     drawKeyOverlay();
                 }
+
                 if (timingBarRunning === false) {
                     drawTimingBar();
                 }
+
                 setTimeout(() => {
                     cache.rawStatus = tokenValue.rawStatus;
                     document.documentElement.style.setProperty('--scoresize', '0.75rem');
@@ -156,7 +159,9 @@ ws.onmessage = (wsEvent) => {
                     }, 250);
                 }, 250);
             }
+
             currentBpm.innerHTML = Math.round(cache.currentBpm);
+
             if (tokenValue.currentBpm !== 0 && tokenValue.rawStatus === 2 && saved.enableNotifyBpmChanges) {
                 currentBpm.style.transition = "all 0s";
                 currentBpm.style.opacity = 0.15;
@@ -180,11 +185,7 @@ ws.onmessage = (wsEvent) => {
 
         if (cache.ingameInterfaceIsEnabled !== tokenValue.ingameInterfaceIsEnabled) {
             cache.ingameInterfaceIsEnabled = tokenValue.ingameInterfaceIsEnabled;
-            if (cache.ingameInterfaceIsEnabled == 0) {
-                combo.style.opacity = 1;
-            } else {
-                combo.style.opacity = 0;
-            }
+            combo.style.opacity = cache.ingameInterfaceIsEnabled == 0 ? 1 : 0;
         }
 
         /*artist*/
@@ -279,8 +280,10 @@ ws.onmessage = (wsEvent) => {
                 diff.style.width = 'auto';
                 diffcontainer.style.transition = "all 0s";
                 diffcontainer.style.transform = "translateX(-100%)";
+
                 const diffwidth = diff.getBoundingClientRect().width;
                 const diffwidthlimit = 520 - mapperClass[0].getBoundingClientRect().width - 60;
+
                 if (diffwidth > diffwidthlimit) {
                     const difflavelwidthlimit = diffwidthlimit - 30 - totalTime.getBoundingClientRect().width;
                     diff.style.width = diffwidthlimit + 'px';
@@ -289,6 +292,7 @@ ws.onmessage = (wsEvent) => {
                 } else {
                     difflavel.classList = "";
                 }
+
                 setTimeout(() => {
                     diffcontainer.style.transition = "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
                     diffcontainer.style.opacity = 1;
@@ -296,22 +300,19 @@ ws.onmessage = (wsEvent) => {
                 }, 30);
 
                 /*ranked*/
-                if (tokenValue.rankedStatus === 7) {
-                    mapRank.innerHTML = "";
-                    mapRank.style.color = "#ff81c5";
-                } else if (tokenValue.rankedStatus === 4) {
-                    mapRank.innerHTML = "";
-                    mapRank.style.color = "#80e6ff";
-                } else if (tokenValue.rankedStatus === 5) {
-                    mapRank.innerHTML = "";
-                    mapRank.style.color = "#ff5b15";
-                } else if (tokenValue.rankedStatus === 6) {
-                    mapRank.innerHTML = "";
-                    mapRank.style.color = "#c0e71b";
-                } else {
-                    mapRank.innerHTML = "";
-                    mapRank.style.color = "#929292";
-                }
+                const rankSettings = {
+                    7: { icon: "", color: "#ff81c5" },
+                    4: { icon: "", color: "#80e6ff" },
+                    5: { icon: "", color: "#ff5b15" },
+                    6: { icon: "", color: "#c0e71b" }
+                };
+                
+                const defaultSetting = { icon: "", color: "#929292" };
+                
+                const { icon, color } = rankSettings[tokenValue.rankedStatus] || defaultSetting;
+                
+                mapRank.innerHTML = icon;
+                mapRank.style.color = color;
             }, 200);
         }
 
@@ -330,7 +331,9 @@ ws.onmessage = (wsEvent) => {
             cache.mBpm = tokenValue.mBpm;
             mapdetail.style.transition = "all 0.2s";
             mapdetail.style.opacity = 0;
+
             const details = ['cs', 'ar', 'od', 'hp', 'mCS', 'mAR', 'mOD', 'mHP'];
+
             setTimeout(() => {
                 for (let i = 0; i < details.length / 2; i++) {
                     const NomodValue = typeof tokenValue[details[i]] === 'string' ? parseInt((tokenValue[details[i]].match(/\d+/g) || []).join(""), 10) : tokenValue[details[i]];
@@ -363,57 +366,34 @@ ws.onmessage = (wsEvent) => {
                 }, 30);
 
                 /*srcolor*/
-                if (tokenValue.mStars.toFixed(2) >= 10) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#222222");
-                    document.documentElement.style.setProperty('--mtextcolor', "#f7d45c");
-                } else if (tokenValue.mStars.toFixed(2) >= 9) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#361018");
-                    document.documentElement.style.setProperty('--mtextcolor', "#f7d45c");
-                } else if (tokenValue.mStars.toFixed(2) >= 8) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#181852");
-                    document.documentElement.style.setProperty('--mtextcolor', "#f7d45c");
-                } else if (tokenValue.mStars.toFixed(2) >= 7.5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#26257f");
-                    document.documentElement.style.setProperty('--mtextcolor', "#f7d45c");
-                } else if (tokenValue.mStars.toFixed(2) >= 7) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#312f9f");
-                    document.documentElement.style.setProperty('--mtextcolor', "#f7d45c");
-                } else if (tokenValue.mStars.toFixed(2) >= 6.5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#4942b3");
-                    document.documentElement.style.setProperty('--mtextcolor', "#f7d45c");
-                } else if (tokenValue.mStars.toFixed(2) >= 6) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#7d4ec2");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 5.5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#c351da");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#fb588e");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 4.5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#ff646c");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 4) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#fe9267");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 3.5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#fcb764");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 3) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#e4fa53");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 2.5) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#7cfa53");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 2) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#3fd6af");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else if (tokenValue.mStars.toFixed(2) >= 1) {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#4fd0f5");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
-                } else {
-                    document.documentElement.style.setProperty('--mdiffcolor', "#469efc");
-                    document.documentElement.style.setProperty('--mtextcolor', "#ffffff");
+                const colors = [
+                    { threshold: 10, mdiffcolor: "#222222", mtextcolor: "#f7d45c" },
+                    { threshold: 9, mdiffcolor: "#361018", mtextcolor: "#f7d45c" },
+                    { threshold: 8, mdiffcolor: "#181852", mtextcolor: "#f7d45c" },
+                    { threshold: 7.5, mdiffcolor: "#26257f", mtextcolor: "#f7d45c" },
+                    { threshold: 7, mdiffcolor: "#312f9f", mtextcolor: "#f7d45c" },
+                    { threshold: 6.5, mdiffcolor: "#4942b3", mtextcolor: "#f7d45c" },
+                    { threshold: 6, mdiffcolor: "#7d4ec2", mtextcolor: "#ffffff" },
+                    { threshold: 5.5, mdiffcolor: "#c351da", mtextcolor: "#ffffff" },
+                    { threshold: 5, mdiffcolor: "#fb588e", mtextcolor: "#ffffff" },
+                    { threshold: 4.5, mdiffcolor: "#ff646c", mtextcolor: "#ffffff" },
+                    { threshold: 4, mdiffcolor: "#fe9267", mtextcolor: "#ffffff" },
+                    { threshold: 3.5, mdiffcolor: "#fcb764", mtextcolor: "#ffffff" },
+                    { threshold: 3, mdiffcolor: "#e4fa53", mtextcolor: "#ffffff" },
+                    { threshold: 2.5, mdiffcolor: "#7cfa53", mtextcolor: "#ffffff" },
+                    { threshold: 2, mdiffcolor: "#3fd6af", mtextcolor: "#ffffff" },
+                    { threshold: 1, mdiffcolor: "#4fd0f5", mtextcolor: "#ffffff" },
+                    { threshold: 0, mdiffcolor: "#469efc", mtextcolor: "#ffffff" }
+                ];
+                
+                const mStarsValue = parseFloat(tokenValue.mStars.toFixed(2));
+                
+                for (const { threshold, mdiffcolor, mtextcolor } of colors) {
+                    if (mStarsValue >= threshold) {
+                        document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
+                        document.documentElement.style.setProperty('--mtextcolor', mtextcolor);
+                        break;
+                    }
                 }
             }, 200);
         }
