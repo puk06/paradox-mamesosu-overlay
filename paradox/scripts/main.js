@@ -158,14 +158,13 @@ ws.onmessage = (wsEvent) => {
                     combo.innerHTML = comboflash.innerHTML = '';
                 }
             }
-            //liveStarRatingをSRにする
 
             const liveStarsParts = tokenValue.liveStarRating.toFixed(2).split(".");
             const liveStarsInteger = liveStarsParts[0];
             const liveStarsDecimal = liveStarsParts[1];
             SR.innerHTML = `${liveStarsInteger}<span id="dot">.</span><span id="srdecimal">${liveStarsDecimal}</span>`;
-            const liveStarsValue = parseFloat(tokenValue.liveStarRating.toFixed(2));
             
+            const liveStarsValue = parseFloat(tokenValue.liveStarRating.toFixed(2));
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
                     document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
