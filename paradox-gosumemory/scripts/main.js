@@ -665,7 +665,7 @@ function ConvertTokenValue(wsdata) {
         combo: tokenValue.gameplay.combo.current,
         ingameInterfaceIsEnabled: tokenValue.settings.showInterface,
         convertedUnstableRate: tokenValue.gameplay.hits.unstableRate,
-        dir: tokenValue.settings.folders.songs + "/" + tokenValue.menu.bm.path.folder,
+        dir: tokenValue.menu.bm.path.folder,
         backgroundImageFileName: tokenValue.menu.bm.path.bg,
         skin: tokenValue.settings.folders.skin,
         currentBpm: tokenValue.menu.bm.stats.BPM.max,
