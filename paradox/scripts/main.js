@@ -1,26 +1,32 @@
-let ws = new WebSocket(`ws://${hostname}:${port}/tokens?LiveTokens&updatesPerSecond=20`);
+let ws = new WebSocket(
+    `ws://${hostname}:${port}/tokens?LiveTokens&updatesPerSecond=20`,
+);
 
 ws.onopen = () => {
-    console.log("Successfully Connected")
+    console.log("Successfully Connected");
     ws.send(JSON.stringify(requestList));
 };
 
-ws.onclose = event => {
+ws.onclose = (event) => {
     console.log("Socket Closed Connection: ", event);
     socket.send("Client Closed!");
 };
 
-ws.onerror = error => console.log("Socket Error: ", error);
+ws.onerror = (error) => console.log("Socket Error: ", error);
 
 ws.onmessage = (wsEvent) => {
     try {
         /*receive*/
         Object.assign(tokenValue, JSON.parse(wsEvent.data));
 
-        tokenValue.audio.fullPath = encodeURIComponent(`${tokenValue.dir}/${tokenValue.mp3Name}`);
-        tokenValue.background.fullPath = encodeURIComponent(`${tokenValue.dir}/${tokenValue.backgroundImageFileName}`);
+        tokenValue.audio.fullPath = encodeURIComponent(
+            `${tokenValue.dir}/${tokenValue.mp3Name}`,
+        );
+        tokenValue.background.fullPath = encodeURIComponent(
+            `${tokenValue.dir}/${tokenValue.backgroundImageFileName}`,
+        );
 
-        let tokenList = '';
+        let tokenList = "";
         for (const key in tokenValue) {
             if (tokenValue.hasOwnProperty(key)) {
                 tokenList += `${key}: ${tokenValue[key]}<br>`;
@@ -32,20 +38,36 @@ ws.onmessage = (wsEvent) => {
 
         Object.assign(tokenValue, JSON.parse(tokenValue.keyOverlay));
         if (saved.enableHpBar === true && tokenValue.rawStatus === 2) {
-            document.documentElement.style.setProperty('--playerhp', `${(((tokenValue.playerHpSmooth ** 2) / 400).toFixed(2)) - 1}%`);
+            document.documentElement.style.setProperty(
+                "--playerhp",
+                `${(tokenValue.playerHpSmooth ** 2 / 400).toFixed(2) - 1}%`,
+            );
         } else {
-            document.documentElement.style.setProperty('--playerhp', `0%`);
+            document.documentElement.style.setProperty("--playerhp", `0%`);
         }
 
         /*status*/
         if (cache.rawStatus !== tokenValue.rawStatus) {
             if (tokenValue.rawStatus !== 2) {
                 background.classList = dimClass;
-                hideElement([visualizer, mods, gameOverlay, grade, pp, document.getElementById('progress'), document.getElementById('uihide')]);
+                hideElement([
+                    visualizer,
+                    mods,
+                    gameOverlay,
+                    grade,
+                    pp,
+                    document.getElementById("progress"),
+                    document.getElementById("uihide"),
+                ]);
             }
 
-            if (tokenValue.rawStatus !== 2 && tokenValue.rawStatus !== 7) { //!playing !result
-                if (saved.enableHideInterface === true || tokenValue.rawStatus === 1) { //editing || uihide
+            if (tokenValue.rawStatus !== 2 && tokenValue.rawStatus !== 7) {
+                //!playing !result
+                if (
+                    saved.enableHideInterface === true ||
+                    tokenValue.rawStatus === 1
+                ) {
+                    //editing || uihide
                     interfaceHide();
                 } else {
                     interfaceShow();
@@ -55,21 +77,35 @@ ws.onmessage = (wsEvent) => {
                 }, 100);
             }
 
-            if (tokenValue.rawStatus === 7) { //result
+            if (tokenValue.rawStatus === 7) {
+                //result
                 setTimeout(() => {
                     reloadUserData(tokenValue.username);
                     interfaceShow();
                 }, 100);
             }
 
-            if (tokenValue.rawStatus === 2) { //playing || watching
+            if (tokenValue.rawStatus === 2) {
+                //playing || watching
                 settingHide();
                 interfaceShow();
                 panelImage.src = currentBG.src;
-                profileDetail.style.height = '100px';
+                profileDetail.style.height = "100px";
                 background.classList = "";
-                showElement([visualizer, mods, gameOverlay, grade, pp, document.getElementById('progress'), document.getElementById('uihide')]);
-                hideElement([avatar, document.getElementById('paddingleft'), document.getElementById('paddingright')]);
+                showElement([
+                    visualizer,
+                    mods,
+                    gameOverlay,
+                    grade,
+                    pp,
+                    document.getElementById("progress"),
+                    document.getElementById("uihide"),
+                ]);
+                hideElement([
+                    avatar,
+                    document.getElementById("paddingleft"),
+                    document.getElementById("paddingright"),
+                ]);
 
                 if (keyOverlayRunning === false) {
                     drawKeyOverlay();
@@ -81,14 +117,25 @@ ws.onmessage = (wsEvent) => {
 
                 setTimeout(() => {
                     cache.rawStatus = tokenValue.rawStatus;
-                    document.documentElement.style.setProperty('--scoresize', '0.75rem');
-                    showElement([document.getElementById('paddingleft'), document.getElementById('paddingright')]);
-                    mods.style.right = box1.scrollWidth + 20 + 'px';
+                    document.documentElement.style.setProperty(
+                        "--scoresize",
+                        "0.75rem",
+                    );
+                    showElement([
+                        document.getElementById("paddingleft"),
+                        document.getElementById("paddingright"),
+                    ]);
+                    mods.style.right = box1.scrollWidth + 20 + "px";
 
                     let unstableRateValue = tokenValue.convertedUnstableRate;
-                    const modsApplied = cache.mods.split(',');
+                    const modsApplied = cache.mods.split(",");
 
-                    if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
+                    if (
+                        modsApplied.includes("DT") ||
+                        modsApplied.includes("NC") ||
+                        modsApplied.includes("Double Time") ||
+                        modsApplied.includes("Nightcore")
+                    ) {
                         unstableRateValue *= 1.5;
                         unstableRateValue = `${unstableRateValue.toFixed(2)} (${tokenValue.convertedUnstableRate.toFixed(2)})`;
                     } else {
@@ -113,12 +160,17 @@ ws.onmessage = (wsEvent) => {
 
         /*pp*/
         if (isPlaying === true) {
-            mods.style.right = box1.scrollWidth + 20 + 'px';
+            mods.style.right = box1.scrollWidth + 20 + "px";
 
             let unstableRateValue = tokenValue.convertedUnstableRate;
-            const modsApplied = cache.mods.split(',');
+            const modsApplied = cache.mods.split(",");
 
-            if (modsApplied.includes("DT") || modsApplied.includes("NC") || modsApplied.includes("Double Time") || modsApplied.includes("Nightcore")) {
+            if (
+                modsApplied.includes("DT") ||
+                modsApplied.includes("NC") ||
+                modsApplied.includes("Double Time") ||
+                modsApplied.includes("Nightcore")
+            ) {
                 unstableRateValue *= 1.5;
                 unstableRateValue = `${unstableRateValue.toFixed(2)} (${tokenValue.convertedUnstableRate.toFixed(2)})`;
             } else {
@@ -136,10 +188,15 @@ ws.onmessage = (wsEvent) => {
             box4.innerHTML = `<span class="red">miss:&nbsp;&nbsp;</span>${tokenValue.miss}`;
             adjustFontSize(0.75);
             drawClock(clock, ctx_clock);
-            if (cache.combo !== tokenValue.combo && cache.ingameInterfaceIsEnabled == 0) {
+            if (
+                cache.combo !== tokenValue.combo &&
+                cache.ingameInterfaceIsEnabled == 0
+            ) {
                 cache.combo = tokenValue.combo;
                 if (tokenValue.combo !== 0) {
-                    combo.innerHTML = comboflash.innerHTML = tokenValue.combo + '<span class="colored margin nonwidth">x</span>';
+                    combo.innerHTML = comboflash.innerHTML =
+                        tokenValue.combo +
+                        '<span class="colored margin nonwidth">x</span>';
                     combo.style.transition = "all 0s";
                     combo.style.fontSize = "1.5rem";
                     comboflash.style.transition = "all 0s";
@@ -147,28 +204,40 @@ ws.onmessage = (wsEvent) => {
                     comboflash.style.fontSize = "2.2rem";
                     comboflash.style.margin = "0px 0px -5px -5px";
                     setTimeout(() => {
-                        combo.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
+                        combo.style.transition =
+                            "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
                         combo.style.fontSize = "1.3rem";
-                        comboflash.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
+                        comboflash.style.transition =
+                            "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
                         comboflash.style.opacity = 0.2;
                         comboflash.style.fontSize = "1.3rem";
                         comboflash.style.margin = "0px";
                     }, 10);
                 } else {
-                    combo.innerHTML = comboflash.innerHTML = '';
+                    combo.innerHTML = comboflash.innerHTML = "";
                 }
             }
 
-            const liveStarsParts = tokenValue.liveStarRating.toFixed(2).split(".");
+            const liveStarsParts = tokenValue.liveStarRating
+                .toFixed(2)
+                .split(".");
             const liveStarsInteger = liveStarsParts[0];
             const liveStarsDecimal = liveStarsParts[1];
             SR.innerHTML = `${liveStarsInteger}<span id="dot">.</span><span id="srdecimal">${liveStarsDecimal}</span>`;
-            
-            const liveStarsValue = parseFloat(tokenValue.liveStarRating.toFixed(2));
+
+            const liveStarsValue = parseFloat(
+                tokenValue.liveStarRating.toFixed(2),
+            );
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
-                    document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
-                    document.documentElement.style.setProperty('--mtextcolor', mtextcolor);
+                    document.documentElement.style.setProperty(
+                        "--mdiffcolor",
+                        mdiffcolor,
+                    );
+                    document.documentElement.style.setProperty(
+                        "--mtextcolor",
+                        mtextcolor,
+                    );
                     break;
                 }
             }
@@ -198,11 +267,16 @@ ws.onmessage = (wsEvent) => {
 
             currentBpm.innerHTML = Math.round(cache.currentBpm);
 
-            if (tokenValue.currentBpm !== 0 && tokenValue.rawStatus === 2 && saved.enableNotifyBpmChanges) {
+            if (
+                tokenValue.currentBpm !== 0 &&
+                tokenValue.rawStatus === 2 &&
+                saved.enableNotifyBpmChanges
+            ) {
                 currentBpm.style.transition = "all 0s";
                 currentBpm.style.opacity = 0.15;
                 setTimeout(() => {
-                    currentBpm.style.transition = "all 3s cubic-bezier(0.16, 1, 0.3, 1)";
+                    currentBpm.style.transition =
+                        "all 3s cubic-bezier(0.16, 1, 0.3, 1)";
                     currentBpm.style.opacity = 0;
                 }, 10);
             }
@@ -219,8 +293,12 @@ ws.onmessage = (wsEvent) => {
             }
         }
 
-        if (cache.ingameInterfaceIsEnabled !== tokenValue.ingameInterfaceIsEnabled) {
-            cache.ingameInterfaceIsEnabled = tokenValue.ingameInterfaceIsEnabled;
+        if (
+            cache.ingameInterfaceIsEnabled !==
+            tokenValue.ingameInterfaceIsEnabled
+        ) {
+            cache.ingameInterfaceIsEnabled =
+                tokenValue.ingameInterfaceIsEnabled;
             combo.style.opacity = cache.ingameInterfaceIsEnabled == 0 ? 1 : 0;
         }
 
@@ -237,7 +315,11 @@ ws.onmessage = (wsEvent) => {
                         artist.style.transition = "all 0.5s";
                         artistcontainer.style.opacity = 1;
                         artist.style.paddingLeft = "0px";
-                        artist.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' + checkUndefined(cache.artistRoman) + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' + checkUndefined(cache.artistRoman);
+                        artist.innerHTML =
+                            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' +
+                            checkUndefined(cache.artistRoman) +
+                            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="artisticon"></span>&nbsp;&nbsp;' +
+                            checkUndefined(cache.artistRoman);
                         artist.style.animationDuration = artistwidth / 45 + "s";
                         artist.classList = "scroll";
                         artistcontainer.classList = "fadescroll";
@@ -248,7 +330,8 @@ ws.onmessage = (wsEvent) => {
                         artist.classList = "";
                         artistcontainer.classList = "";
                         setTimeout(() => {
-                            artistcontainer.style.transition = "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
+                            artistcontainer.style.transition =
+                                "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
                             artistcontainer.style.opacity = 1;
                             artistcontainer.style.transform = "translateX(0%)";
                         }, 10);
@@ -271,7 +354,11 @@ ws.onmessage = (wsEvent) => {
                         titlecontainer.style.transition = "all 0.5s";
                         titlecontainer.style.opacity = 1;
                         title.style.paddingLeft = "0px";
-                        title.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' + checkUndefined(tokenValue.titleRoman) + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' + checkUndefined(tokenValue.titleRoman);
+                        title.innerHTML =
+                            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' +
+                            checkUndefined(tokenValue.titleRoman) +
+                            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="titleicon"></span>&nbsp;&nbsp;' +
+                            checkUndefined(tokenValue.titleRoman);
                         title.style.animationDuration = titlewidth / 45 + "s";
                         title.classList = "scroll";
                         titlecontainer.classList = "fadescroll";
@@ -282,7 +369,8 @@ ws.onmessage = (wsEvent) => {
                         title.classList = "";
                         titlecontainer.classList = "";
                         setTimeout(() => {
-                            titlecontainer.style.transition = "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
+                            titlecontainer.style.transition =
+                                "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
                             titlecontainer.style.opacity = 1;
                             titlecontainer.style.transform = "translateX(0%)";
                         }, 10);
@@ -292,18 +380,21 @@ ws.onmessage = (wsEvent) => {
         }
 
         /*diff*/
-        if (cache.diffName !== tokenValue.diffName || cache.creator !== tokenValue.creator) {
+        if (
+            cache.diffName !== tokenValue.diffName ||
+            cache.creator !== tokenValue.creator
+        ) {
             cache.diffName = tokenValue.diffName;
             cache.creator = tokenValue.creator;
 
             const formatTime = {
                 minute: Math.floor(tokenValue.totaltime / 60000),
-                second: Math.floor(tokenValue.totaltime / 1000 % 60)
+                second: Math.floor((tokenValue.totaltime / 1000) % 60),
             };
 
             function formatTimeString(time) {
-                if (isNaN(time)) return '00';
-                return time < 10 ? '0' + time : time;
+                if (isNaN(time)) return "00";
+                return time < 10 ? "0" + time : time;
             }
 
             diffcontainer.style.transition = "all 0.2s";
@@ -312,25 +403,30 @@ ws.onmessage = (wsEvent) => {
                 difflavel.innerHTML = checkUndefined(tokenValue.diffName);
                 totalTime.innerHTML = `(${formatTimeString(formatTime.minute)}:${formatTimeString(formatTime.second)})`;
                 mapper.innerHTML = `&nbsp;<div class="mapper"><span class="secondary-font">//</span>&nbsp;${checkUndefined(tokenValue.creator)}`;
-                difflavel.style.width = 'auto';
-                diff.style.width = 'auto';
+                difflavel.style.width = "auto";
+                diff.style.width = "auto";
                 diffcontainer.style.transition = "all 0s";
                 diffcontainer.style.transform = "translateX(-100%)";
 
                 const diffwidth = diff.getBoundingClientRect().width;
-                const diffwidthlimit = 520 - mapperClass[0].getBoundingClientRect().width - 60;
+                const diffwidthlimit =
+                    520 - mapperClass[0].getBoundingClientRect().width - 60;
 
                 if (diffwidth > diffwidthlimit) {
-                    const difflavelwidthlimit = diffwidthlimit - 30 - totalTime.getBoundingClientRect().width;
-                    diff.style.width = diffwidthlimit + 'px';
-                    difflavel.style.width = difflavelwidthlimit + 'px';
+                    const difflavelwidthlimit =
+                        diffwidthlimit -
+                        30 -
+                        totalTime.getBoundingClientRect().width;
+                    diff.style.width = diffwidthlimit + "px";
+                    difflavel.style.width = difflavelwidthlimit + "px";
                     difflavel.classList = "faderight";
                 } else {
                     difflavel.classList = "";
                 }
 
                 setTimeout(() => {
-                    diffcontainer.style.transition = "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
+                    diffcontainer.style.transition =
+                        "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
                     diffcontainer.style.opacity = 1;
                     diffcontainer.style.transform = "translateX(0%)";
                 }, 30);
@@ -340,25 +436,28 @@ ws.onmessage = (wsEvent) => {
                     7: { icon: "", color: "#ff81c5" },
                     4: { icon: "", color: "#80e6ff" },
                     5: { icon: "", color: "#ff5b15" },
-                    6: { icon: "", color: "#c0e71b" }
+                    6: { icon: "", color: "#c0e71b" },
                 };
-                
+
                 const defaultSetting = { icon: "", color: "#929292" };
-                
-                const { icon, color } = rankSettings[tokenValue.rankedStatus] || defaultSetting;
-                
+
+                const { icon, color } =
+                    rankSettings[tokenValue.rankedStatus] || defaultSetting;
+
                 mapRank.innerHTML = icon;
                 mapRank.style.color = color;
             }, 200);
         }
 
         /*detail*/
-        if (cache.mCS !== tokenValue.mCS ||
+        if (
+            cache.mCS !== tokenValue.mCS ||
             cache.mAR !== tokenValue.mAR ||
             cache.mOD !== tokenValue.mOD ||
             cache.mHP !== tokenValue.mHP ||
             cache.mStars !== tokenValue.mStars ||
-            cache.mBpm !== tokenValue.mBpm) {
+            cache.mBpm !== tokenValue.mBpm
+        ) {
             cache.mCS = tokenValue.mCS;
             cache.mAR = tokenValue.mAR;
             cache.mOD = tokenValue.mOD;
@@ -368,19 +467,50 @@ ws.onmessage = (wsEvent) => {
             mapdetail.style.transition = "all 0.2s";
             mapdetail.style.opacity = 0;
 
-            const details = ['cs', 'ar', 'od', 'hp', 'mCS', 'mAR', 'mOD', 'mHP'];
+            const details = [
+                "cs",
+                "ar",
+                "od",
+                "hp",
+                "mCS",
+                "mAR",
+                "mOD",
+                "mHP",
+            ];
 
             setTimeout(() => {
                 for (let i = 0; i < details.length / 2; i++) {
-                    const NomodValue = typeof tokenValue[details[i]] === 'string' ? parseInt((tokenValue[details[i]].match(/\d+/g) || []).join(""), 10) : tokenValue[details[i]];
-                    const ModedValue = typeof tokenValue[details[i + 5]] === 'string' ? parseInt((tokenValue[details[i + 4]].match(/\d+/g) || []).join(""), 10) : tokenValue[details[i + 4]];
+                    const NomodValue =
+                        typeof tokenValue[details[i]] === "string"
+                            ? parseInt(
+                                  (
+                                      tokenValue[details[i]].match(/\d+/g) || []
+                                  ).join(""),
+                                  10,
+                              )
+                            : tokenValue[details[i]];
+                    const ModedValue =
+                        typeof tokenValue[details[i + 5]] === "string"
+                            ? parseInt(
+                                  (
+                                      tokenValue[details[i + 4]].match(
+                                          /\d+/g,
+                                      ) || []
+                                  ).join(""),
+                                  10,
+                              )
+                            : tokenValue[details[i + 4]];
 
                     if (NomodValue > ModedValue) {
                         const element = document.getElementById(details[i]);
-                        element.innerHTML = tokenValue[details[i + 4]] + '&nbsp;<span class="down"></span>';
+                        element.innerHTML =
+                            tokenValue[details[i + 4]] +
+                            '&nbsp;<span class="down"></span>';
                     } else if (NomodValue < ModedValue) {
                         const element = document.getElementById(details[i]);
-                        element.innerHTML = tokenValue[details[i + 4]] + '&nbsp;<span class="up"></span>';
+                        element.innerHTML =
+                            tokenValue[details[i + 4]] +
+                            '&nbsp;<span class="up"></span>';
                     } else {
                         const element = document.getElementById(details[i]);
                         element.innerHTML = tokenValue[details[i + 4]];
@@ -393,12 +523,24 @@ ws.onmessage = (wsEvent) => {
 
                 if (!isPlaying) {
                     SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-                    const mStarsValue = parseFloat(tokenValue.mStars.toFixed(2));
-                    
-                    for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
+                    const mStarsValue = parseFloat(
+                        tokenValue.mStars.toFixed(2),
+                    );
+
+                    for (const {
+                        threshold,
+                        mdiffcolor,
+                        mtextcolor,
+                    } of SRColors) {
                         if (mStarsValue >= threshold) {
-                            document.documentElement.style.setProperty('--mdiffcolor', mdiffcolor);
-                            document.documentElement.style.setProperty('--mtextcolor', mtextcolor);
+                            document.documentElement.style.setProperty(
+                                "--mdiffcolor",
+                                mdiffcolor,
+                            );
+                            document.documentElement.style.setProperty(
+                                "--mtextcolor",
+                                mtextcolor,
+                            );
                             break;
                         }
                     }
@@ -408,7 +550,8 @@ ws.onmessage = (wsEvent) => {
                 mapdetail.style.transform = "translateY(-100%)";
 
                 setTimeout(() => {
-                    mapdetail.style.transition = "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
+                    mapdetail.style.transition =
+                        "all 0.7s cubic-bezier(0.16, 1, 0.3, 1)";
                     mapdetail.style.opacity = 1;
                     mapdetail.style.transform = "translateY(0%)";
                 }, 30);
@@ -418,8 +561,8 @@ ws.onmessage = (wsEvent) => {
         /*mods*/
         if (cache.mods !== tokenValue.mods) {
             cache.mods = tokenValue.mods;
-            mods.innerHTML = '';
-            let modsApplied = cache.mods.split(',');
+            mods.innerHTML = "";
+            let modsApplied = cache.mods.split(",");
             cache.modsArray = modsApplied;
 
             if (!modsApplied[0]) {
@@ -427,19 +570,26 @@ ws.onmessage = (wsEvent) => {
             }
 
             if (modsApplied.length === 1) {
-                if (modsApplied.includes("AU") || modsApplied.includes("AutoPlay") || modsApplied.includes("SV2") || modsApplied.includes("Score V2")) {
+                if (
+                    modsApplied.includes("AU") ||
+                    modsApplied.includes("AutoPlay") ||
+                    modsApplied.includes("SV2") ||
+                    modsApplied.includes("Score V2")
+                ) {
                     modsApplied.push("NM");
                 }
             }
 
-            modsApplied = modsApplied.filter(name => name !== '');
-            modsApplied.forEach(name => {
-                let modImg = document.createElement('img');
-                modImg.setAttribute('src', modsImgs[name]);
+            modsApplied = modsApplied.filter((name) => name !== "");
+            modsApplied.forEach((name) => {
+                let modImg = document.createElement("img");
+                modImg.setAttribute("src", modsImgs[name]);
                 mods.appendChild(modImg);
             });
 
-            const modImages = Array.from(document.querySelectorAll('#mods img'));
+            const modImages = Array.from(
+                document.querySelectorAll("#mods img"),
+            );
 
             for (let i = 0; i < modImages.length; i++) {
                 modImages[i].style.zIndex = -i;
@@ -453,7 +603,7 @@ ws.onmessage = (wsEvent) => {
 
         if (cache.skin !== tokenValue.skin) {
             cache.skin = tokenValue.skin;
-            skinBG.src = `http://${hostname}:${port}/Skins/${encodeURIComponent(tokenValue.skin)}/${encodeURIComponent('menu-background.jpg')}`;
+            skinBG.src = `http://${hostname}:${port}/Skins/${encodeURIComponent(tokenValue.skin)}/${encodeURIComponent("menu-background.jpg")}`;
         }
 
         if (cache.osuIsRunning !== tokenValue.osuIsRunning) {
@@ -473,18 +623,25 @@ ws.onmessage = (wsEvent) => {
         }
 
         /*bg*/
-        if (cache.background.fullPath !== tokenValue.background.fullPath && backgroundReady === true) {
+        if (
+            cache.background.fullPath !== tokenValue.background.fullPath &&
+            backgroundReady === true
+        ) {
             backgroundReady = false;
             cache.background.fullPath = tokenValue.background.fullPath;
             currentBG.src = `http://${hostname}:${port}/Songs/${tokenValue.background.fullPath}?a=${Math.random(10000)}`;
         }
     } catch (err) {
         console.log(err);
-    };
+    }
 };
 
 currentBG.onload = () => {
-    if (loadingBGcount === 1 && currentBG.src === `http://${hostname}:${port}/overlays/paradox/assets/loading.png`) {
+    if (
+        loadingBGcount === 1 &&
+        currentBG.src ===
+            `http://${hostname}:${port}/overlays/paradox/assets/loading.png`
+    ) {
         if (skinBG.naturalWidth !== 0) {
             currentBG.src = skinBG.src;
         } else {
@@ -499,16 +656,37 @@ currentBG.onload = () => {
             colorFade(averageColor, 1000);
         }
 
-        const shadedCanvas = coordinate(resizeImage(currentBG, background.width, background.height), 1 - (saved.background.contrast));
-        shader.applyShaderToCanvas(shadedCanvas, saved.background.blur, saved.background.blur, 0, true);
+        const shadedCanvas = coordinate(
+            resizeImage(currentBG, background.width, background.height),
+            1 - saved.background.contrast,
+        );
+        shader.applyShaderToCanvas(
+            shadedCanvas,
+            saved.background.blur,
+            saved.background.blur,
+            0,
+            true,
+        );
 
-        const shadedBannerCanvas = resizeImage(currentBG, banner.width, banner.height);
+        const shadedBannerCanvas = resizeImage(
+            currentBG,
+            banner.width,
+            banner.height,
+        );
         shader.applyShaderToCanvas(shadedBannerCanvas, 1, 5);
 
         fade(background, shadedCanvas, 1000, true);
         fade(banner, shadedBannerCanvas, 1000);
-        fade(artwork, resizeImage(currentBG, artwork.width, artwork.height), 1000).then(() => {
-            if (currentBG.src === `http://${hostname}:${port}/overlays/paradox/assets/loading.png` && loadingBGcount !== 1) {
+        fade(
+            artwork,
+            resizeImage(currentBG, artwork.width, artwork.height),
+            1000,
+        ).then(() => {
+            if (
+                currentBG.src ===
+                    `http://${hostname}:${port}/overlays/paradox/assets/loading.png` &&
+                loadingBGcount !== 1
+            ) {
                 loadingBGcount++;
                 cache.background.fullPath = null;
             } else if (firstLoad) {
@@ -530,7 +708,15 @@ currentBG.onerror = () => {
 panelImage.onload = () => {
     fade(avatar, resizeImage(panelImage, avatar.width, avatar.height), 500);
     if (!customImage.src) {
-        fade(panelBackground, resizeImage(panelImage, panelBackground.width, panelBackground.height), 500);
+        fade(
+            panelBackground,
+            resizeImage(
+                panelImage,
+                panelBackground.width,
+                panelBackground.height,
+            ),
+            500,
+        );
     }
 };
 
@@ -539,20 +725,24 @@ panelImage.onerror = () => {
 };
 
 customImage.onload = () => {
-    fade(panelBackground, resizeImage(customImage, panelBackground.width, panelBackground.height), 500);
-}
+    fade(
+        panelBackground,
+        resizeImage(customImage, panelBackground.width, panelBackground.height),
+        500,
+    );
+};
 
-audiostatus.addEventListener('animationend', () => {
+audiostatus.addEventListener("animationend", () => {
     audiostatus.classList = "";
-})
+});
 
-audioElement.addEventListener('error', () => {
+audioElement.addEventListener("error", () => {
     audioStopped = true;
     audioError.classList = "popuperror";
     audioError.style.opacity = 1;
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
     backgroundRefresh();
     hideGameUIRefresh();
     drawTriangles();
@@ -560,10 +750,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function drawClock(canvas, ctx) {
     ctx.reset();
-    const progress = (tokenValue.time / tokenValue.totaltime * 100000).toFixed(2);
+    const progress = (
+        (tokenValue.time / tokenValue.totaltime) *
+        100000
+    ).toFixed(2);
     const center = canvas.width / 2;
     const startAngle = -Math.PI / 2;
-    const currentTimeAngle = (3.6 * progress) * Math.PI / 180;
+    const currentTimeAngle = (3.6 * progress * Math.PI) / 180;
     ctx.beginPath();
     ctx.arc(center, center, center, startAngle, startAngle + currentTimeAngle);
     ctx.lineTo(center, center);
@@ -574,14 +767,24 @@ function drawClock(canvas, ctx) {
 
 const audioControl = setInterval(() => {
     adjustedTime = (cache.time + 0.1).toFixed(2);
-    timeDifference = (Math.abs(audioElement.currentTime - adjustedTime)).toFixed(2);
+    timeDifference = Math.abs(audioElement.currentTime - adjustedTime).toFixed(
+        2,
+    );
 
     if (audioStopped === false && saved.enableAudioCapture === true) {
         if (cache.rawStatus === 2) {
-            if (cache.modsArray.includes("DT") || cache.modsArray.includes("NC") || cache.modsArray.includes("Double Time") || cache.modsArray.includes("Nightcore")) {
+            if (
+                cache.modsArray.includes("DT") ||
+                cache.modsArray.includes("NC") ||
+                cache.modsArray.includes("Double Time") ||
+                cache.modsArray.includes("Nightcore")
+            ) {
                 audioElement.playbackRate = 1.5;
                 modSpeed = 1.5;
-            } else if (cache.modsArray.includes("HT") || cache.modsArray.includes("Half Time")) {
+            } else if (
+                cache.modsArray.includes("HT") ||
+                cache.modsArray.includes("Half Time")
+            ) {
                 audioElement.playbackRate = 0.75;
                 modSpeed = 0.75;
             }
@@ -602,7 +805,11 @@ const audioControl = setInterval(() => {
                 consecutiveCount = 0;
             }
 
-            if (consecutiveCount >= 2 && !audioElement.paused && cache.rawStatus !== 7) {
+            if (
+                consecutiveCount >= 2 &&
+                !audioElement.paused &&
+                cache.rawStatus !== 7
+            ) {
                 try {
                     audioElement.pause();
                 } catch (error) {
