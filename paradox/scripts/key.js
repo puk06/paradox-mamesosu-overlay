@@ -7,7 +7,7 @@ function drawKeyOverlay() {
     let speed;
     let gradient;
 
-    const checkIsPlaying = function () {
+    const checkIsPlaying = () => {
         if (tokenValue.rawStatus !== 2 || saved.enableKeyOverlay === false) {
             keyOverlayRunning = false;
             return false;
@@ -17,7 +17,7 @@ function drawKeyOverlay() {
         }
     };
 
-    const VariablesEqual = function () {
+    const VariablesEqual = () => {
         const oldKeyObj = key;
         const newKeyObj = saved.key;
 
@@ -31,13 +31,13 @@ function drawKeyOverlay() {
         return !!objIsEqual;
     };
 
-    const initializeVariables = function () {
+    const initializeVariables = () => {
         key = {
             ...saved.key,
         };
     };
 
-    const setupVariables = function () {
+    const setupVariables = () => {
         let keyName = ["K1", "K2", "M1", "M2"];
         keyCanvas.width = keyCanvasCache.width = key.size;
         document.documentElement.style.setProperty(
@@ -144,20 +144,20 @@ function drawKeyOverlay() {
         }
     };
 
-    const createGradient = function () {
+    const createGradient = () => {
         gradient = ctx_key.createLinearGradient(0, 0, keyCanvas.width, 0);
         gradient.addColorStop(1, `rgba(255, 255, 255, 0.8)`);
         gradient.addColorStop(
             0.5,
             `rgba(${accentColor[0]}, ${accentColor[1]}, ${accentColor[2]}, 0.4)`,
-        ); // グラデーションの中間点
+        );
         gradient.addColorStop(
             0,
             `rgba(${accentColor[0]}, ${accentColor[1]}, ${accentColor[2]}, 0.0)`,
         );
     };
 
-    const setKeyStatus = function () {
+    const setKeyStatus = () => {
         speed = Math.max(Math.round((6 * tokenValue.currentBpm) / 200), 2);
         let keyStatus = [
             tokenValue.K1Pressed,
@@ -259,7 +259,7 @@ function drawKeyOverlay() {
         }
     };
 
-    const renderKeyStatus = function () {
+    const renderKeyStatus = () => {
         ctx_key.fillStyle = `rgba(255, 255, 255, 0.8)`;
         ctx_key.fillRect(0, 0, key.size, keyCanvas.height);
         ctx_key.globalCompositeOperation = "source-over";
@@ -275,7 +275,7 @@ function drawKeyOverlay() {
         ctx_key.fillRect(0, 0, key.size, keyCanvas.height);
     };
 
-    const loop = function () {
+    const loop = () => {
         if (checkIsPlaying() === true) {
             if (VariablesEqual() === false) {
                 initializeVariables();

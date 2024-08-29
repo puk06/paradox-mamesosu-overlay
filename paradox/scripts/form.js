@@ -166,11 +166,13 @@ async function reloadUserData(username = tokenValue.banchoId) {
         .then(() => {
             setAPIValue(banchoMode);
             document.getElementById("apiconnect").style.color = "#99ccff";
-            document.getElementById("apiconnect").innerHTML = "Connected!";
+            const serverName = banchoMode ? "Bancho" : "Mamestagram";
+            document.getElementById("apiconnect").innerHTML =
+                "Connected to " + serverName + " API!";
         })
         .catch(() => {
             document.getElementById("apiconnect").style.color = "#ff99cc";
-            document.getElementById("apiconnect").innerHTML = "Failed;-; Server down?";
+            document.getElementById("apiconnect").innerHTML = "Failed;-;";
             validUserdata = false;
             analyzerHide();
             console.error("Error: ", error);
@@ -179,10 +181,9 @@ async function reloadUserData(username = tokenValue.banchoId) {
 
 function setAPIValue(banchoMode) {
     validUserdata = true;
-    const IconURL =
-        banchoMode
-            ? "https://a.ppy.sh/"
-            : "https://a.mamesosu.net/";
+    const IconURL = banchoMode
+        ? "https://a.ppy.sh/"
+        : "https://a.mamesosu.net/";
     panelImage.src = IconURL + cacheUserData.user_id;
     showElement([avatar]);
     hideElement([
@@ -230,10 +231,12 @@ function setAPIValue(banchoMode) {
             `<span class="plus">${parseFloat(cacheUserData.accuracy) >= parseFloat(saved.cacheUserData.accuracy) ? "+" : "-"}</span>${parseFloat(Math.abs(cacheUserData.accuracy - saved.cacheUserData.accuracy)).toFixed(2)}%`;
         document.getElementById("detailbox4").innerHTML =
             `<span class="plus">${parseFloat(cacheUserData.playcount) >= parseFloat(saved.cacheUserData.playcount) ? "+" : "-"}</span>${addCommasToNumber(Math.abs(cacheUserData.playcount - saved.cacheUserData.playcount))}</span>`;
+
         showElement([
             document.getElementById("paddingleft"),
             document.getElementById("detailleft"),
         ]);
+
         if (user === tokenValue.banchoId) {
             showElement([
                 document.getElementById("paddingright"),
@@ -249,11 +252,11 @@ function setAPIValue(banchoMode) {
 }
 
 function handleKeyPress(event) {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
         event.preventDefault();
-        const inputText = document.getElementById('apikey').value;
+        const inputText = document.getElementById("apikey").value;
         saved.apiKey = inputText;
-        setLocal('apiKey', saved.apiKey);
+        setLocal("apiKey", saved.apiKey);
         reloadUserData();
     }
 }
@@ -517,7 +520,7 @@ function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     checkUpdate();
     getLocalAll()
         .then((saved) => {
@@ -680,7 +683,7 @@ document.querySelectorAll(".optionbutton").forEach((button, index) => {
 });
 
 document.querySelectorAll('input[name="accentColor"]').forEach((radio) => {
-    radio.addEventListener("change", function () {
+    radio.addEventListener("change", () => {
         if (this.value === "custom") {
             saved.enableCustomColor = true;
             setLocal("enableCustomColor", saved.enableCustomColor);
@@ -696,7 +699,7 @@ document.querySelectorAll('input[name="accentColor"]').forEach((radio) => {
 });
 
 document.querySelectorAll(".colorsliders").forEach((slider) => {
-    slider.addEventListener("input", function () {
+    slider.addEventListener("input", () => {
         const outputs = document.querySelectorAll(".colorslidersoutputs");
         let output;
         if (this.id === "Rslider") {
@@ -740,7 +743,7 @@ document
     });
 
 document.querySelectorAll(".backgroundsliders").forEach((slider) => {
-    slider.addEventListener("input", function () {
+    slider.addEventListener("input", () => {
         const outputs = document.querySelectorAll(".backgroundslidersoutputs");
         let output;
         if (this.id === "opacity") {
@@ -812,7 +815,7 @@ document
     });
 
 document.querySelectorAll(".timingsliders").forEach((slider) => {
-    slider.addEventListener("input", function () {
+    slider.addEventListener("input", () => {
         const outputs = document.querySelectorAll(".timingslidersoutputs");
         let output;
         if (this.id === "timingX") {
@@ -834,41 +837,39 @@ document.querySelectorAll(".timingsliders").forEach((slider) => {
         output.textContent = this.value;
         setLocal("timing", saved.timing);
     });
-    slider.addEventListener("mousedown", function () {
+    slider.addEventListener("mousedown", () => {
         document.getElementById("timing").classList.add("dragging");
         document.getElementById("setting").style.backgroundColor =
             "rgba(10, 10, 10, 0.5)";
     });
 });
 
-window.addEventListener("mouseup", function () {
+window.addEventListener("mouseup", () => {
     document.getElementById("timing").classList.remove("dragging");
     document.getElementById("keyoverlay").classList.remove("dragging");
     document.getElementById("setting").style.backgroundColor =
         "rgba(10, 10, 10, 0.95)";
 });
 
-document
-    .getElementById("enableaudiocapture")
-    .addEventListener("change", function () {
-        if (this.checked) {
-            saved.enableAudioCapture = true;
-            setLocal("enableAudioCapture", saved.enableAudioCapture);
-        } else {
-            saved.enableAudioCapture = false;
-            setLocal("enableAudioCapture", saved.enableAudioCapture);
-            document.getElementById("enableaudiovisualizer").checked = false;
-            document
-                .getElementById("enableaudiovisualizer")
-                .dispatchEvent(new Event("change"));
-            visualizer.style.opacity = 0;
-            audioElement.pause();
-        }
-    });
+document.getElementById("enableaudiocapture").addEventListener("change", () => {
+    if (this.checked) {
+        saved.enableAudioCapture = true;
+        setLocal("enableAudioCapture", saved.enableAudioCapture);
+    } else {
+        saved.enableAudioCapture = false;
+        setLocal("enableAudioCapture", saved.enableAudioCapture);
+        document.getElementById("enableaudiovisualizer").checked = false;
+        document
+            .getElementById("enableaudiovisualizer")
+            .dispatchEvent(new Event("change"));
+        visualizer.style.opacity = 0;
+        audioElement.pause();
+    }
+});
 
 document
     .getElementById("enableaudiovisualizer")
-    .addEventListener("change", function () {
+    .addEventListener("change", () => {
         if (this.checked) {
             saved.enableAudioVisualizer = true;
             setLocal("enableAudioVisualizer", saved.enableAudioVisualizer);
@@ -885,23 +886,21 @@ document
         }
     });
 
-document
-    .getElementById("enablebackground")
-    .addEventListener("change", function () {
-        if (this.checked) {
-            saved.enableBackground = true;
-            setLocal("enableBackground", saved.enableBackground);
-            document.getElementById("backgroundwrapper").style.opacity = 1;
-        } else {
-            saved.enableBackground = false;
-            setLocal("enableBackground", saved.enableBackground);
-            document.getElementById("backgroundwrapper").style.opacity = 0;
-        }
-    });
+document.getElementById("enablebackground").addEventListener("change", () => {
+    if (this.checked) {
+        saved.enableBackground = true;
+        setLocal("enableBackground", saved.enableBackground);
+        document.getElementById("backgroundwrapper").style.opacity = 1;
+    } else {
+        saved.enableBackground = false;
+        setLocal("enableBackground", saved.enableBackground);
+        document.getElementById("backgroundwrapper").style.opacity = 0;
+    }
+});
 
 document
     .getElementById("enablehideinterface")
-    .addEventListener("change", function () {
+    .addEventListener("change", () => {
         if (this.checked) {
             saved.enableHideInterface = true;
             setLocal("enableHideInterface", saved.enableHideInterface);
@@ -921,7 +920,7 @@ document
 
 document
     .getElementById("enablenotifybpmchanges")
-    .addEventListener("change", function () {
+    .addEventListener("change", () => {
         if (this.checked) {
             saved.enableNotifyBpmChanges = true;
             setLocal("enableNotifyBpmChanges", saved.enableNotifyBpmChanges);
@@ -931,7 +930,7 @@ document
         }
     });
 
-document.getElementById("enablehpbar").addEventListener("change", function () {
+document.getElementById("enablehpbar").addEventListener("change", () => {
     if (this.checked) {
         saved.enableHpBar = true;
         setLocal("enableHpBar", saved.enableHpBar);
@@ -942,7 +941,7 @@ document.getElementById("enablehpbar").addEventListener("change", function () {
     }
 });
 
-document.getElementById("enablevoid").addEventListener("change", function () {
+document.getElementById("enablevoid").addEventListener("change", () => {
     if (this.checked) {
         setTimeout(() => {
             this.checked = false;
@@ -950,35 +949,31 @@ document.getElementById("enablevoid").addEventListener("change", function () {
     }
 });
 
-document
-    .getElementById("enablekeyoverlay")
-    .addEventListener("change", function () {
-        if (this.checked) {
-            saved.enableKeyOverlay = true;
-            setLocal("enableKeyOverlay", saved.enableKeyOverlay);
-            document.getElementById("key").style.opacity = 1;
-            drawKeyOverlay();
-        } else {
-            saved.enableKeyOverlay = false;
-            setLocal("enableKeyOverlay", saved.enableKeyOverlay);
-            document.getElementById("key").style.opacity = 0;
-        }
-    });
+document.getElementById("enablekeyoverlay").addEventListener("change", () => {
+    if (this.checked) {
+        saved.enableKeyOverlay = true;
+        setLocal("enableKeyOverlay", saved.enableKeyOverlay);
+        document.getElementById("key").style.opacity = 1;
+        drawKeyOverlay();
+    } else {
+        saved.enableKeyOverlay = false;
+        setLocal("enableKeyOverlay", saved.enableKeyOverlay);
+        document.getElementById("key").style.opacity = 0;
+    }
+});
 
-document
-    .getElementById("keyhidegameui")
-    .addEventListener("change", function () {
-        if (this.checked) {
-            saved.key.hideGameUI = true;
-            setLocal("key", saved.key);
-        } else {
-            saved.key.hideGameUI = false;
-            setLocal("key", saved.key);
-        }
-        hideGameUIRefresh();
-    });
+document.getElementById("keyhidegameui").addEventListener("change", () => {
+    if (this.checked) {
+        saved.key.hideGameUI = true;
+        setLocal("key", saved.key);
+    } else {
+        saved.key.hideGameUI = false;
+        setLocal("key", saved.key);
+    }
+    hideGameUIRefresh();
+});
 
-document.getElementById("keyall").addEventListener("change", function () {
+document.getElementById("keyall").addEventListener("change", () => {
     if (this.checked) {
         saved.key.all = true;
         setLocal("key", saved.key);
@@ -988,7 +983,7 @@ document.getElementById("keyall").addEventListener("change", function () {
     }
 });
 
-document.getElementById("keyinvert").addEventListener("change", function () {
+document.getElementById("keyinvert").addEventListener("change", () => {
     if (this.checked) {
         saved.key.invert = true;
         setLocal("key", saved.key);
@@ -998,7 +993,7 @@ document.getElementById("keyinvert").addEventListener("change", function () {
     }
 });
 
-document.getElementById("keymerge").addEventListener("change", function () {
+document.getElementById("keymerge").addEventListener("change", () => {
     if (this.checked) {
         saved.key.merge = true;
         setLocal("key", saved.key);
@@ -1009,7 +1004,7 @@ document.getElementById("keymerge").addEventListener("change", function () {
 });
 
 document.querySelectorAll(".keysliders").forEach((slider) => {
-    slider.addEventListener("input", function () {
+    slider.addEventListener("input", () => {
         const outputs = document.querySelectorAll(".keyslidersoutputs");
         let output;
         if (this.id === "keyX") {
@@ -1034,7 +1029,7 @@ document.querySelectorAll(".keysliders").forEach((slider) => {
         output.textContent = this.value;
         setLocal("key", saved.key);
     });
-    slider.addEventListener("mousedown", function () {
+    slider.addEventListener("mousedown", () => {
         document.getElementById("keyoverlay").classList.add("dragging");
         document.getElementById("setting").style.backgroundColor =
             "rgba(10, 10, 10, 0.5)";
@@ -1042,7 +1037,7 @@ document.querySelectorAll(".keysliders").forEach((slider) => {
 });
 
 document.querySelectorAll('input[name="urposition"]').forEach((radio) => {
-    radio.addEventListener("change", function () {
+    radio.addEventListener("change", () => {
         if (this.value === "top") {
             saved.timing.urPosition = "top";
         } else if (this.value === "bottom") {

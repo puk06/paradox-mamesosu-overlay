@@ -26,13 +26,6 @@ ws.onmessage = (wsEvent) => {
             `${tokenValue.dir}/${tokenValue.backgroundImageFileName}`,
         );
 
-        let tokenList = "";
-        for (const key in tokenValue) {
-            if (tokenValue.hasOwnProperty(key)) {
-                tokenList += `${key}: ${tokenValue[key]}<br>`;
-            }
-        }
-
         /*time*/
         cache.time = tokenValue.time;
 
@@ -62,7 +55,6 @@ ws.onmessage = (wsEvent) => {
             }
 
             if (tokenValue.rawStatus !== 2 && tokenValue.rawStatus !== 7) {
-                //!playing !result
                 if (
                     saved.enableHideInterface === true ||
                     tokenValue.rawStatus === 1
@@ -78,7 +70,6 @@ ws.onmessage = (wsEvent) => {
             }
 
             if (tokenValue.rawStatus === 7) {
-                //result
                 setTimeout(() => {
                     reloadUserData(tokenValue.username);
                     interfaceShow();
@@ -86,7 +77,6 @@ ws.onmessage = (wsEvent) => {
             }
 
             if (tokenValue.rawStatus === 2) {
-                //playing || watching
                 settingHide();
                 interfaceShow();
                 panelImage.src = currentBG.src;
@@ -95,9 +85,9 @@ ws.onmessage = (wsEvent) => {
                 showElement([
                     visualizer,
                     mods,
-                    gameOverlay,
                     grade,
                     pp,
+                    gameOverlay,
                     document.getElementById("progress"),
                     document.getElementById("uihide"),
                 ]);
@@ -228,6 +218,7 @@ ws.onmessage = (wsEvent) => {
             const liveStarsValue = parseFloat(
                 tokenValue.liveStarRating.toFixed(2),
             );
+
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
                     document.documentElement.style.setProperty(
@@ -742,7 +733,7 @@ audioElement.addEventListener("error", () => {
     audioError.style.opacity = 1;
 });
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     backgroundRefresh();
     hideGameUIRefresh();
     drawTriangles();

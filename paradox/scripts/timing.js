@@ -16,7 +16,7 @@ function drawTimingBar() {
     let gradient;
     let normalizationFactor;
 
-    const checkIsPlaying = function () {
+    const checkIsPlaying = () => {
         if (tokenValue.rawStatus !== 2 || saved.enableTimingBar === false) {
             cache.hitErrors = [];
             timingBarRunning = false;
@@ -27,7 +27,7 @@ function drawTimingBar() {
         }
     };
 
-    const VariablesEqual = function () {
+    const VariablesEqual = () => {
         const oldTimingObj = timing;
         const newTimingObj = saved.timing;
         const oldObjValue = Object.values(oldTimingObj);
@@ -43,7 +43,7 @@ function drawTimingBar() {
         return !(!objIsEqual || oldOD !== newOD || oldMods !== newMods);
     };
 
-    const initializeVariables = function () {
+    const initializeVariables = () => {
         timing = { ...saved.timing };
         barThickness = 4 * timing.size;
         hitErrorWidth = 4 * timing.size;
@@ -63,7 +63,7 @@ function drawTimingBar() {
         gradient.addColorStop(1, `${color}00`);
     };
 
-    const calculateTimingWindow = function () {
+    const calculateTimingWindow = () => {
         let modOD = OD;
         if (Array.isArray(mods)) {
             if (
@@ -94,7 +94,7 @@ function drawTimingBar() {
         }
     };
 
-    const setupVariables = function () {
+    const setupVariables = () => {
         timingBar.width =
             timingCanvas.width =
             timingBar.height =
@@ -179,7 +179,7 @@ function drawTimingBar() {
         );
     };
 
-    const createTimingBar = function () {
+    const createTimingBar = () => {
         ctx_timingBar.reset();
         ctx_timingBar.beginPath();
         ctx_timingBar.fillStyle = "#ffff61";
@@ -227,7 +227,7 @@ function drawTimingBar() {
         );
     };
 
-    const renderHitErrors = function () {
+    const renderHitErrors = () => {
         ctx_timing.reset();
         ctx_timing.globalCompositeOperation = "source-over";
         ctx_timing.drawImage(timingBar, 0, 0);
@@ -316,7 +316,7 @@ function drawTimingBar() {
         });
     };
 
-    const setHitErrors = function () {
+    const setHitErrors = () => {
         let currentHitErrors = [];
         let average;
         if (Array.isArray(tokenValue.hitErrors)) {
@@ -372,7 +372,7 @@ function drawTimingBar() {
         cache.hitErrors = currentHitErrors;
     };
 
-    const animateHitErrors = function () {
+    const animateHitErrors = () => {
         hitErrors.forEach((hitError, index) => {
             if (hitError.alpha <= 0) {
                 hitErrors.splice(index, 1);
@@ -380,7 +380,7 @@ function drawTimingBar() {
         });
     };
 
-    const loop = function () {
+    const loop = () => {
         if (checkIsPlaying() === true) {
             if (VariablesEqual() === false) {
                 initializeVariables();

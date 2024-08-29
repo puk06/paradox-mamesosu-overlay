@@ -135,7 +135,7 @@ const audioVisualizer = (() => {
         "u_colors",
     ]);
 
-    const setupVisualizer = function () {
+    const setupVisualizer = () => {
         gl_v.viewport(0, 0, visualizer.width, visualizer.height);
         gl_v.clearColor(0, 0, 0, 1);
         gl_v.enable(gl_v.BLEND);
@@ -145,13 +145,13 @@ const audioVisualizer = (() => {
     };
 
     let requestId = null;
-    const renderVisualizer = function () {
+    const renderVisualizer = () => {
         if (requestId !== null) {
             cancelAnimationFrame(requestId);
             requestId = null;
         }
 
-        const fadeParticlesColor = function () {
+        const fadeParticlesColor = () => {
             particlesColor.forEach((color) => {
                 if (color[3] >= 0) {
                     color[3] -= 0.05 * color[3] * (1.5 - speed);
@@ -161,7 +161,7 @@ const audioVisualizer = (() => {
             });
         };
 
-        const setParticlesColor = function () {
+        const setParticlesColor = () => {
             analyser.getByteFrequencyData(frequencyData);
             for (let i = 0; i < MaxNumX; i++) {
                 const barValue = Math.floor(
@@ -207,7 +207,7 @@ const audioVisualizer = (() => {
             }
         };
 
-        const renderParticles = function () {
+        const renderParticles = () => {
             const colorLocation = visualizerUniforms["u_colors"];
             gl_v.useProgram(visualizerProgram);
             gl_v.clearColor(0, 0, 0, 0);
@@ -218,7 +218,7 @@ const audioVisualizer = (() => {
             gl_v.drawArrays(gl_v.TRIANGLES, 0, 6);
         };
 
-        const loop = function () {
+        const loop = () => {
             if (saved.enableAudioVisualizer === true && gl_v) {
                 setParticlesColor();
                 renderParticles();
@@ -231,7 +231,7 @@ const audioVisualizer = (() => {
         loop();
     };
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
         setupVisualizer();
     });
 
