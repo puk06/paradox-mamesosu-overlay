@@ -21,14 +21,22 @@ function createProgram(gl, vertexShader, fragmentShader) {
 
 function createProgramFromSource(gl, vertexShaderSource, fragmentShaderSource) {
     const vertexShader = createShader(gl, vertexShaderSource, gl.VERTEX_SHADER);
-    const fragmentShader = createShader(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
+    const fragmentShader = createShader(
+        gl,
+        fragmentShaderSource,
+        gl.FRAGMENT_SHADER,
+    );
     return createProgram(gl, vertexShader, fragmentShader);
 }
 
 function createVbo(gl, array, usage) {
     const vbo = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-    gl.bufferData(gl.ARRAY_BUFFER, array, usage !== undefined ? usage : gl.STATIC_DRAW);
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        array,
+        usage !== undefined ? usage : gl.STATIC_DRAW,
+    );
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     return vbo;
 }
@@ -50,7 +58,14 @@ function createVao(gl, vboObjs, ibo) {
     vboObjs.forEach((vboObj) => {
         gl.bindBuffer(gl.ARRAY_BUFFER, vboObj.buffer);
         gl.enableVertexAttribArray(vboObj.index);
-        gl.vertexAttribPointer(vboObj.index, vboObj.size, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(
+            vboObj.index,
+            vboObj.size,
+            gl.FLOAT,
+            false,
+            0,
+            0,
+        );
     });
     gl.bindVertexArray(null);
     if (ibo !== undefined) {
@@ -62,7 +77,7 @@ function createVao(gl, vboObjs, ibo) {
 
 function getUniformLocations(gl, program, keys) {
     const locations = {};
-    keys.forEach(key => {
+    keys.forEach((key) => {
         locations[key] = gl.getUniformLocation(program, key);
     });
     return locations;

@@ -1,18 +1,24 @@
 function drawTriangles() {
-    const canvas = document.getElementById('triangles');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("triangles");
+    const ctx = canvas.getContext("2d");
 
     const triangleSizeRange = { min: 35, max: 100 };
-    const triangleAlphaRange = { min: 0.3, max: 0.6};
+    const triangleAlphaRange = { min: 0.3, max: 0.6 };
     const scrollSpeedRange = { min: 0.2, max: 0.5 };
     const spawnFrequencyRange = { min: 500, max: 1000 };
 
     const triangles = [];
 
     function createTriangle() {
-        const size = Math.random() * (triangleSizeRange.max - triangleSizeRange.min) + triangleSizeRange.min;
-        const alpha = Math.random() * (triangleAlphaRange.max - triangleAlphaRange.min) + triangleAlphaRange.min;
-        const speed = Math.random() * (scrollSpeedRange.max - scrollSpeedRange.min) + scrollSpeedRange.min;
+        const size =
+            Math.random() * (triangleSizeRange.max - triangleSizeRange.min) +
+            triangleSizeRange.min;
+        const alpha =
+            Math.random() * (triangleAlphaRange.max - triangleAlphaRange.min) +
+            triangleAlphaRange.min;
+        const speed =
+            Math.random() * (scrollSpeedRange.max - scrollSpeedRange.min) +
+            scrollSpeedRange.min;
         const x = Math.random() * canvas.width;
         const y = canvas.height + size;
         triangles.push({ x, y, size, alpha, speed });
@@ -46,7 +52,10 @@ function drawTriangles() {
 
     function spawnTriangles() {
         createTriangle();
-        const frequency = Math.random() * (spawnFrequencyRange.max - spawnFrequencyRange.min) + spawnFrequencyRange.min;
+        const frequency =
+            Math.random() *
+                (spawnFrequencyRange.max - spawnFrequencyRange.min) +
+            spawnFrequencyRange.min;
         setTimeout(spawnTriangles, frequency);
     }
 

@@ -3,10 +3,10 @@ function easeInOutQuad(t) {
 }
 
 function saveCanvas(canvas) {
-    const savedCanvas = document.createElement('canvas');
+    const savedCanvas = document.createElement("canvas");
     savedCanvas.width = canvas.width;
     savedCanvas.height = canvas.height;
-    const ctx = savedCanvas.getContext('2d');
+    const ctx = savedCanvas.getContext("2d");
     ctx.drawImage(canvas, 0, 0);
     return savedCanvas;
 }
@@ -25,9 +25,9 @@ function rgbToHsv(r, g, b) {
     } else if (max === r) {
         h = 60 * (((g - b) / delta) % 6);
     } else if (max === g) {
-        h = 60 * (((b - r) / delta) + 2);
+        h = 60 * ((b - r) / delta + 2);
     } else {
-        h = 60 * (((r - g) / delta) + 4);
+        h = 60 * ((r - g) / delta + 4);
     }
 
     if (h < 0) {
@@ -99,7 +99,7 @@ function colorBlend(backRgb, frontRgb, alpha) {
 function calculateLuminanceFactor(rgb) {
     const [R, G, B] = rgb;
     const brightness = (0.2126 * R + 0.7152 * G + 0.0722 * B) / 255;
-    const LuminanceFactor = (-2 / 3) * brightness + 1
+    const LuminanceFactor = (-2 / 3) * brightness + 1;
     return LuminanceFactor;
 }
 
@@ -107,8 +107,23 @@ function average(img) {
     const imgWidth = img.naturalWidth;
     const imgHeight = img.naturalHeight;
 
-    ctx_virtual.drawImage(img, 0, 0, imgWidth, imgHeight, 0, 0, virtual.width, virtual.height);
-    const rawrgb = ctx_virtual.getImageData(0, 0, virtual.width, virtual.height).data;
+    ctx_virtual.drawImage(
+        img,
+        0,
+        0,
+        imgWidth,
+        imgHeight,
+        0,
+        0,
+        virtual.width,
+        virtual.height,
+    );
+    const rawrgb = ctx_virtual.getImageData(
+        0,
+        0,
+        virtual.width,
+        virtual.height,
+    ).data;
     let totalR = 0,
         totalG = 0,
         totalB = 0;
@@ -126,16 +141,20 @@ function average(img) {
     let adjustS = hsv[1];
     let adjustV = hsv[2];
     if (hsv[1] !== 0) {
-        adjustS = hsv[1] - ((hsv[1] - 50) / 2);
+        adjustS = hsv[1] - (hsv[1] - 50) / 2;
     }
-    adjustV = hsv[2] - ((hsv[2] - 50) / 2);
+    adjustV = hsv[2] - (hsv[2] - 50) / 2;
     const adjustRgb = hsvToRgb(hsv[0], adjustS, adjustV);
 
-    const blendColor = colorBlend(avgRgb, adjustRgb, 1 - saved.background.contrast);
+    const blendColor = colorBlend(
+        avgRgb,
+        adjustRgb,
+        1 - saved.background.contrast,
+    );
     backgroundLuminanceFactor = calculateLuminanceFactor(blendColor);
 
     let rgb = adjustRgb;
-    if ((rgb[0] + rgb[1] + rgb[2]) !== 0) {
+    if (rgb[0] + rgb[1] + rgb[2] !== 0) {
         for (;;) {
             if (rgb[0] + rgb[1] + rgb[2] > 255) {
                 break;
@@ -149,23 +168,24 @@ function average(img) {
 }
 
 function coordinate(image, colorAmount) {
-
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = image.width;
     canvas.height = image.height;
-    const ctx = canvas.getContext('2d');
-    const saturate = 100 + (saved.background.blur * 5);
+    const ctx = canvas.getContext("2d");
+    const saturate = 100 + saved.background.blur * 5;
     ctx.filter = `saturate(${saturate}%)`;
-    const maskColor = saved.enableCustomColor ? saved.customColor : averageColor;
+    const maskColor = saved.enableCustomColor
+        ? saved.customColor
+        : averageColor;
 
     ctx.drawImage(image, 0, 0);
 
     ctx.fillStyle = `rgba(${Math.min(Math.max(maskColor[0], 0), 255)}, ${Math.min(Math.max(maskColor[1], 0), 255)}, ${Math.min(Math.max(maskColor[2], 0), 255)}, ${colorAmount})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (saved.background.normalizeBrightness === true)
-        ctx.fillStyle = `rgba(0, 0, 0, ${1 - (saved.background.opacity / 100 * backgroundLuminanceFactor)})`;
+        ctx.fillStyle = `rgba(0, 0, 0, ${1 - (saved.background.opacity / 100) * backgroundLuminanceFactor})`;
     else {
-        ctx.fillStyle = `rgba(0, 0, 0, ${1 - (saved.background.opacity / 100)})`;
+        ctx.fillStyle = `rgba(0, 0, 0, ${1 - saved.background.opacity / 100})`;
     }
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -173,13 +193,11 @@ function coordinate(image, colorAmount) {
 }
 
 async function fade(targetCanvas, to, duration, RGBA = false) {
-    await Promise.all([
-        to.onload ? to.onload : Promise.resolve()
-    ]);
+    await Promise.all([to.onload ? to.onload : Promise.resolve()]);
 
     return new Promise((resolve) => {
         const from = saveCanvas(targetCanvas);
-        const ctx_targetCanvas = targetCanvas.getContext('2d');
+        const ctx_targetCanvas = targetCanvas.getContext("2d");
         let startTime;
 
         function animate(timestamp) {
@@ -190,7 +208,7 @@ async function fade(targetCanvas, to, duration, RGBA = false) {
             const fadeInAlpha = easedProgress;
             let fadeOutAlpha;
             if (RGBA === true) {
-                fadeOutAlpha = (1 - easedProgress);
+                fadeOutAlpha = 1 - easedProgress;
             } else {
                 fadeOutAlpha = 1;
             }
@@ -226,15 +244,27 @@ function colorFade(targetColor, duration) {
             const easedProgress = easeInOutQuad(progress);
 
             const currentColor = {
-                r: initialColor[0] + (targetColor[0] - initialColor[0]) * easedProgress,
-                g: initialColor[1] + (targetColor[1] - initialColor[1]) * easedProgress,
-                b: initialColor[2] + (targetColor[2] - initialColor[2]) * easedProgress
+                r:
+                    initialColor[0] +
+                    (targetColor[0] - initialColor[0]) * easedProgress,
+                g:
+                    initialColor[1] +
+                    (targetColor[1] - initialColor[1]) * easedProgress,
+                b:
+                    initialColor[2] +
+                    (targetColor[2] - initialColor[2]) * easedProgress,
             };
 
             accentColor = [currentColor.r, currentColor.g, currentColor.b];
 
-            document.documentElement.style.setProperty('--accentcolor', `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`);
-            document.documentElement.style.setProperty('--accentcolorhalf', `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.4)`);
+            document.documentElement.style.setProperty(
+                "--accentcolor",
+                `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`,
+            );
+            document.documentElement.style.setProperty(
+                "--accentcolorhalf",
+                `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.4)`,
+            );
 
             if (elapsed >= duration) {
                 resolve();
@@ -249,17 +279,37 @@ function colorFade(targetColor, duration) {
 function resizeImage(img, width, height) {
     const imgWidth = img.naturalWidth;
     const imgHeight = img.naturalHeight;
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
-    if ((imgWidth * height / width) < imgHeight) {
-        const aspectError = (imgHeight - (imgWidth * height / width)) / 2;
-        ctx.drawImage(img, 0, aspectError, imgWidth, (imgWidth * height / width), 0, 0, width, height);
+    if ((imgWidth * height) / width < imgHeight) {
+        const aspectError = (imgHeight - (imgWidth * height) / width) / 2;
+        ctx.drawImage(
+            img,
+            0,
+            aspectError,
+            imgWidth,
+            (imgWidth * height) / width,
+            0,
+            0,
+            width,
+            height,
+        );
     } else {
-        const aspectError = (imgWidth - (imgHeight * width / height)) / 2;
-        ctx.drawImage(img, aspectError, 0, (imgHeight * width / height), imgHeight, 0, 0, width, height);
+        const aspectError = (imgWidth - (imgHeight * width) / height) / 2;
+        ctx.drawImage(
+            img,
+            aspectError,
+            0,
+            (imgHeight * width) / height,
+            imgHeight,
+            0,
+            0,
+            width,
+            height,
+        );
     }
 
     return canvas;
@@ -267,15 +317,24 @@ function resizeImage(img, width, height) {
 
 function backgroundRefresh() {
     average(currentBG);
-    const shadedCanvas = coordinate(resizeImage(currentBG, background.width, background.height), 1 - (saved.background.contrast));
-    shader.applyShaderToCanvas(shadedCanvas, saved.background.blur, saved.background.blur, 0, true);
+    const shadedCanvas = coordinate(
+        resizeImage(currentBG, background.width, background.height),
+        1 - saved.background.contrast,
+    );
+    shader.applyShaderToCanvas(
+        shadedCanvas,
+        saved.background.blur,
+        saved.background.blur,
+        0,
+        true,
+    );
     ctx_background.reset();
     ctx_background.drawImage(shadedCanvas, 0, 0);
 }
 
 function hideGameUIRefresh() {
-    const canvas = document.getElementById('uihide');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("uihide");
+    const ctx = canvas.getContext("2d");
     const timingWidth = 800;
     const timingHeight = 120;
     const keyWidth = 200;
@@ -285,18 +344,52 @@ function hideGameUIRefresh() {
 
     if (saved.timing.hideGameUI === true) {
         ctx.beginPath();
-        ctx.arc(canvas.width / 2 - timingWidth / 2, canvas.height, timingHeight, 0, Math.PI * 2);
-        ctx.arc(canvas.width / 2 + timingWidth / 2, canvas.height, timingHeight, 0, Math.PI * 2);
+        ctx.arc(
+            canvas.width / 2 - timingWidth / 2,
+            canvas.height,
+            timingHeight,
+            0,
+            Math.PI * 2,
+        );
+        ctx.arc(
+            canvas.width / 2 + timingWidth / 2,
+            canvas.height,
+            timingHeight,
+            0,
+            Math.PI * 2,
+        );
         ctx.fill();
-        ctx.fillRect(canvas.width / 2 - timingWidth / 2, canvas.height - timingHeight, timingWidth, timingHeight);
+        ctx.fillRect(
+            canvas.width / 2 - timingWidth / 2,
+            canvas.height - timingHeight,
+            timingWidth,
+            timingHeight,
+        );
     }
 
     if (saved.key.hideGameUI === true) {
         ctx.beginPath();
-        ctx.arc(canvas.width, canvas.height / 2 + 55 - keyWidth / 2, keyHeight, 0, Math.PI * 2);
-        ctx.arc(canvas.width, canvas.height / 2 + 55 + keyWidth / 2, keyHeight, 0, Math.PI * 2);
+        ctx.arc(
+            canvas.width,
+            canvas.height / 2 + 55 - keyWidth / 2,
+            keyHeight,
+            0,
+            Math.PI * 2,
+        );
+        ctx.arc(
+            canvas.width,
+            canvas.height / 2 + 55 + keyWidth / 2,
+            keyHeight,
+            0,
+            Math.PI * 2,
+        );
         ctx.fill();
-        ctx.fillRect(canvas.width - keyHeight, canvas.height / 2 - keyWidth / 2, keyHeight, keyWidth);
+        ctx.fillRect(
+            canvas.width - keyHeight,
+            canvas.height / 2 - keyWidth / 2,
+            keyHeight,
+            keyWidth,
+        );
     }
 
     shader.applyShaderToCanvas(canvas, 5, 5);

@@ -80,19 +80,19 @@ a {
   font-size: 0.4rem;
 }
 
-#api {
+#apikey{
   position: relative;
-  font-size: 0.5rem;
-  color: #ffffff;
-  padding: 4px 12px;
-  border-radius: 8px;
-  background-color: #444444;
-  border: none;
-  cursor: pointer;
 }
 
-#api:hover {
-  background-color: #606060;
+input[type="password"] {
+  font-size: 0.5rem;
+  color: #444444;
+  padding: 0px 6px;
+  border-radius: 8px;
+  background-color: #606060ff;
+  border: none;
+  width: 250px;
+  height: 26px;
 }
 
 #apiconnect {

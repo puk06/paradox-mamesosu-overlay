@@ -170,7 +170,7 @@ async function reloadUserData(username = tokenValue.banchoId) {
             document.getElementById("apiconnect").innerHTML =
                 "Connected to " + serverName + " API!";
         })
-        .catch(() => {
+        .catch((error) => {
             document.getElementById("apiconnect").style.color = "#ff99cc";
             document.getElementById("apiconnect").innerHTML = "Failed;-;";
             validUserdata = false;

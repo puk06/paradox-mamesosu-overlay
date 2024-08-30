@@ -7,10 +7,7 @@ ws.onopen = () => {
     ws.send(JSON.stringify(requestList));
 };
 
-ws.onclose = (event) => {
-    console.log("Socket Closed Connection: ", event);
-    socket.send("Client Closed!");
-};
+ws.onclose = (event) => console.log("Socket Closed Connection: ", event);
 
 ws.onerror = (error) => console.log("Socket Error: ", error);
 
