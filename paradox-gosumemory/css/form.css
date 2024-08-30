@@ -95,6 +95,18 @@ input[type="password"] {
   height: 26px;
 }
 
+input[type="usermame"] {
+  font-size: 0.5rem;
+  color: #f0f0f0;
+  padding: 0px 6px;
+  border-radius: 8px;
+  background-color: #606060ff;
+  border: none;
+  width: 200px;
+  height: 26px;
+  text-align: right;
+}
+
 #apiconnect {
   position: absolute;
   color: #ffffbb;

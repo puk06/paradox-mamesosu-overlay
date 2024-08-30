@@ -1,5 +1,3 @@
-const InGameUsername = "257";
-
 if (navigator.language === "ja-JP" && !window.location.href.includes("JP")) {
     window.location.href =
         window.location.href + encodeURIComponent("index_JP.html");
@@ -66,7 +64,11 @@ function getLocalAll() {
 
 async function getBanchoData(username, gamemode) {
     if (saved.apiKey !== null) {
-        const apiUrl = `https://osu.ppy.sh/api/get_user?k=${saved.apiKey}&u=${encodeURIComponent(username)}&m=${gamemode}`;
+        let apiUrl = `https://osu.ppy.sh/api/get_user?k=${saved.apiKey}&u=${encodeURIComponent(username)}&m=${gamemode}`;
+        if (!/^\d+$/.test(username)) {
+            apiUrl += `&type=string`;
+        }
+
         const response = await fetch(apiUrl);
         const data = await response.json();
         for (const key in data[0]) {
@@ -144,8 +146,10 @@ async function reloadUserData() {
 
     const mode = tokenValue.mode;
     const banchoMode = document.getElementById("banchomode").checked;
+    const userId = document.getElementById("userid").value;
+    console.log("userId: ", userId);
 
-    await getUserData(InGameUsername, mode, banchoMode)
+    await getUserData(userId, mode, banchoMode)
         .then(() => {
             setAPIValue(banchoMode);
             document.getElementById("apiconnect").style.color = "#99ccff";
@@ -155,7 +159,7 @@ async function reloadUserData() {
         })
         .catch((error) => {
             document.getElementById("apiconnect").style.color = "#ff99cc";
-            document.getElementById("apiconnect").innerHTML = error.message;
+            document.getElementById("apiconnect").innerHTML = "API connection failed.";
             validUserdata = false;
             analyzerHide();
             console.error("Error: ", error.message);
@@ -234,12 +238,22 @@ function setAPIValue(banchoMode) {
     }, 250);
 }
 
-function handleKeyPress(event) {
+function handleKeyPressAPI(event) {
     if (event.key === "Enter") {
         event.preventDefault();
         const inputText = document.getElementById("apikey").value;
         saved.apiKey = inputText;
         setLocal("apiKey", saved.apiKey);
+        reloadUserData();
+    }
+}
+
+function handleKeyPressID(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        const inputText = document.getElementById("userid").value;
+        saved.username = inputText;
+        setLocal("username", saved.username);
         reloadUserData();
     }
 }

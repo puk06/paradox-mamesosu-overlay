@@ -55,6 +55,7 @@ let saved = {
     },
     enableHpBar: true,
     enableUnstableRate: false,
+    username: "",
 };
 
 const url = new URL(window.location.href);
