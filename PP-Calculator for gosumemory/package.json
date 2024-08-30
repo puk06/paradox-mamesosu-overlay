@@ -1,0 +1,16 @@
+{
+    "name": "PP-Calculator",
+    "version": "1.0.0",
+    "description": "",
+    "main": "PP Calculator.js",
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "cargo-cp-artifact": "^0.1.9",
+        "mamestagram-pp-js": "git+ssh://git@github.com/puk06/mamestagram-pp-js.git",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/ws": "^8.5.12"
+    }
+}

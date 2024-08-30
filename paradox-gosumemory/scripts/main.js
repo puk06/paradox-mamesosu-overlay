@@ -20,16 +20,11 @@ ws.onmessage = (wsEvent) => {
         tokenValue.background.fullPath = encodeURIComponent(
             `${tokenValue.dir}/${tokenValue.backgroundImageFileName}`,
         );
-        let tokenList = "";
-        for (const key in tokenValue) {
-            if (tokenValue.hasOwnProperty(key)) {
-                tokenList += `${key}: ${tokenValue[key]}<br>`;
-            }
-        }
 
         /*time*/
         cache.time = tokenValue.time;
 
+        console.log(tokenValue);
         Object.assign(tokenValue, tokenValue.keyOverlay);
         if (saved.enableHpBar === true && tokenValue.rawStatus === 2) {
             document.documentElement.style.setProperty(
