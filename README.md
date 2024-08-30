@@ -32,7 +32,6 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 
 3. Right-click on the browser you just added from within the source and select **Dialog** to open another window. Click in the window to bring up the settings window.
 
-## How to use (using Gosumemory)
 ### What you need to install in advance (Gosumemory version)
 [OBS Studio (Open Broadcanst Software®)](https://obsproject.com/)
 [Gosumemory](https://github.com/l3lackShark/gosumemory)
@@ -43,13 +42,13 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 
 2. Next, build the external PP Calculator. Install [Node.js](https://nodejs.org/) and execute the following command at the command prompt.
 ```bash
-cd path of installed folder/PP-Calculator
+cd "path of installed folder/PP-Calculator for gosumemory"
 npm install
 ````
 
 3. Next, start PP Calculator.
 ```bash
-node “PP Calculator.js”
+node "PP Calculator.js"
 ````
 Note that PP Calculator will close by itself if Gosumemory is not running.
 

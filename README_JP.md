@@ -29,8 +29,6 @@
 
 3.ソース内から先ほど追加したブラウザを右クリックし、**対話**を選択すると別のウィンドウが開きます。ウィンドウ内をクリックすると設定画面が出てきます。
 
-
-## 使用方法（Gosumemoryを使用）
 ### 事前にインストールする必要があるもの (Gosumemory版)
 ・[OBS Studio(Open Broadcanst Software®)](https://obsproject.com/)
 ・[Gosumemory](https://github.com/l3lackShark/gosumemory)
@@ -41,7 +39,7 @@
 
 2.外付けのPP Calculatorを次にビルドします。[Node.js](https://nodejs.org/)をインストールし、コマンドプロンプトで以下のコマンドを実行します。
 ```bash
-cd インストールしたフォルダのパス/PP-Calculator for gosumemory
+cd "インストールしたフォルダのパス/PP-Calculator for gosumemory"
 npm install
 ```
 
