@@ -56,7 +56,6 @@ ws.onmessage = (wsEvent) => {
                     saved.enableHideInterface === true ||
                     tokenValue.rawStatus === 1
                 ) {
-                    //editing || uihide
                     interfaceHide();
                 } else {
                     interfaceShow();
@@ -331,7 +330,6 @@ ws.onmessage = (wsEvent) => {
         /*title*/
         if (cache.titleRoman !== tokenValue.titleRoman) {
             cache.titleRoman = tokenValue.titleRoman;
-
             titlecontainer.style.transition = "all 0.2s";
             titlecontainer.style.opacity = 0;
             setTimeout(() => {

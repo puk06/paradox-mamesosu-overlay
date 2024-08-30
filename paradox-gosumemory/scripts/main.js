@@ -7,7 +7,6 @@ ws.onopen = () => {
 
 ws.onclose = (event) => console.log("Socket Closed Connection: ", event);
 
-
 ws.onerror = (error) => console.log("Socket Error: ", error);
 
 ws.onmessage = (wsEvent) => {
@@ -57,12 +56,10 @@ ws.onmessage = (wsEvent) => {
             }
 
             if (tokenValue.rawStatus !== 2 && tokenValue.rawStatus !== 7) {
-                //!playing !result
                 if (
                     saved.enableHideInterface === true ||
                     tokenValue.rawStatus === 1
                 ) {
-                    //editing || uihide
                     interfaceHide();
                 } else {
                     interfaceShow();
@@ -73,14 +70,12 @@ ws.onmessage = (wsEvent) => {
             }
 
             if (tokenValue.rawStatus === 7) {
-                //result
                 setTimeout(() => {
                     interfaceShow();
                 }, 100);
             }
 
             if (tokenValue.rawStatus === 2) {
-                //playing || watching
                 settingHide();
                 interfaceShow();
                 panelImage.src = currentBG.src;
@@ -149,6 +144,7 @@ ws.onmessage = (wsEvent) => {
                     isPlaying = true;
                 }, 250);
             }
+
             cache.rawStatus = tokenValue.rawStatus;
         }
 
