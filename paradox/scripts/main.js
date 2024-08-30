@@ -616,9 +616,6 @@ ws.onmessage = (wsEvent) => {
             backgroundReady = false;
             cache.background.fullPath = tokenValue.background.fullPath;
             currentBG.src = `http://${hostname}:${port}/Songs/${tokenValue.background.fullPath}?a=${Math.random(10000)}`;
-            console.log(
-                `http://${hostname}:${port}/Songs/${tokenValue.background.fullPath}?a=${Math.random(10000)}`,
-            );
         }
     } catch (err) {
         console.log(err);

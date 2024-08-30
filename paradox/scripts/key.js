@@ -28,7 +28,7 @@ function drawKeyOverlay() {
             (value, index) => value === newObjValue[index],
         );
 
-        return !!objIsEqual;
+        return objIsEqual;
     };
 
     const initializeVariables = () => {

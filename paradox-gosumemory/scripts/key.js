@@ -163,13 +163,13 @@ function drawKeyOverlay() {
             tokenValue.K1Pressed,
             tokenValue.K2Pressed,
             tokenValue.M1Pressed,
-            tokenValue.M2Pressed,
+            tokenValue.M2Pressed
         ];
         let keyCount = [
             tokenValue.K1Count,
             tokenValue.K2Count,
             tokenValue.M1Count,
-            tokenValue.M2Count,
+            tokenValue.M2Count
         ];
 
         if (key.invert === true) {

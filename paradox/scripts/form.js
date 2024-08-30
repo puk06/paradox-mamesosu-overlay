@@ -164,7 +164,7 @@ async function reloadUserData(username = tokenValue.banchoId) {
 
     await getUserData(username, mode, banchoMode)
         .then(() => {
-            setAPIValue(banchoMode);
+            setAPIValue(username, banchoMode);
             document.getElementById("apiconnect").style.color = "#99ccff";
             const serverName = banchoMode ? "Bancho" : "Mamestagram";
             document.getElementById("apiconnect").innerHTML =
@@ -179,7 +179,7 @@ async function reloadUserData(username = tokenValue.banchoId) {
         });
 }
 
-function setAPIValue(banchoMode) {
+function setAPIValue(user, banchoMode) {
     validUserdata = true;
     const IconURL = banchoMode
         ? "https://a.ppy.sh/"
@@ -520,7 +520,7 @@ function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
     checkUpdate();
     getLocalAll()
         .then((saved) => {
@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document
     .getElementById("Dontshow")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.warning = false;
         } else {
@@ -552,7 +552,7 @@ document
 
 document
     .getElementById("custompanelbg")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         const file = document.getElementById("custompanelbg").files[0];
         if (file) {
             const reader = new FileReader();
@@ -587,7 +587,7 @@ document
 
 document
     .getElementById("custompanelbgreset")
-    .addEventListener("click", (event) => {
+    .addEventListener("click", function (event) {
         event.preventDefault();
         document.getElementById("wrap").style.opacity = 0;
         document.getElementById("custompanelbgfilename").innerHTML = "";
@@ -666,7 +666,7 @@ document.addEventListener("mousedown", function (event) {
 });
 
 document.querySelectorAll(".optionbutton").forEach((button, index) => {
-    button.addEventListener("click", (event) => {
+    button.addEventListener("click", function (event) {
         event.preventDefault();
         const options = document.querySelectorAll(".option");
         const option = options[index];
@@ -683,7 +683,7 @@ document.querySelectorAll(".optionbutton").forEach((button, index) => {
 });
 
 document.querySelectorAll('input[name="accentColor"]').forEach((radio) => {
-    radio.addEventListener("change", () => {
+    radio.addEventListener("change", function () {
         if (this.value === "custom") {
             saved.enableCustomColor = true;
             setLocal("enableCustomColor", saved.enableCustomColor);
@@ -699,7 +699,7 @@ document.querySelectorAll('input[name="accentColor"]').forEach((radio) => {
 });
 
 document.querySelectorAll(".colorsliders").forEach((slider) => {
-    slider.addEventListener("input", () => {
+    slider.addEventListener("input", function () {
         const outputs = document.querySelectorAll(".colorslidersoutputs");
         let output;
         if (this.id === "Rslider") {
@@ -730,7 +730,7 @@ document.querySelectorAll(".colorsliders").forEach((slider) => {
 
 document
     .getElementById("backgroundnormalizebrightness")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.background.normalizeBrightness = true;
             setLocal("background", saved.background);
@@ -743,7 +743,7 @@ document
     });
 
 document.querySelectorAll(".backgroundsliders").forEach((slider) => {
-    slider.addEventListener("input", () => {
+    slider.addEventListener("input", function () {
         const outputs = document.querySelectorAll(".backgroundslidersoutputs");
         let output;
         if (this.id === "opacity") {
@@ -764,7 +764,7 @@ document.querySelectorAll(".backgroundsliders").forEach((slider) => {
 
 document
     .getElementById("enabletimingbar")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.enableTimingBar = true;
             setLocal("enableTimingBar", saved.enableTimingBar);
@@ -779,7 +779,7 @@ document
 
 document
     .getElementById("timinghidegameui")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.timing.hideGameUI = true;
             setLocal("timing", saved.timing);
@@ -792,7 +792,7 @@ document
 
 document
     .getElementById("timingmoving")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.timing.moving = true;
             setLocal("timing", saved.timing);
@@ -804,7 +804,7 @@ document
 
 document
     .getElementById("timingnormalize")
-    .addEventListener("change", function (event) {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.timing.normalize = true;
             setLocal("timing", saved.timing);
@@ -815,7 +815,7 @@ document
     });
 
 document.querySelectorAll(".timingsliders").forEach((slider) => {
-    slider.addEventListener("input", () => {
+    slider.addEventListener("input", function () {
         const outputs = document.querySelectorAll(".timingslidersoutputs");
         let output;
         if (this.id === "timingX") {
@@ -837,21 +837,21 @@ document.querySelectorAll(".timingsliders").forEach((slider) => {
         output.textContent = this.value;
         setLocal("timing", saved.timing);
     });
-    slider.addEventListener("mousedown", () => {
+    slider.addEventListener("mousedown", function () {
         document.getElementById("timing").classList.add("dragging");
         document.getElementById("setting").style.backgroundColor =
             "rgba(10, 10, 10, 0.5)";
     });
 });
 
-window.addEventListener("mouseup", () => {
+window.addEventListener("mouseup", function () {
     document.getElementById("timing").classList.remove("dragging");
     document.getElementById("keyoverlay").classList.remove("dragging");
     document.getElementById("setting").style.backgroundColor =
         "rgba(10, 10, 10, 0.95)";
 });
 
-document.getElementById("enableaudiocapture").addEventListener("change", () => {
+document.getElementById("enableaudiocapture").addEventListener("change", function () {
     if (this.checked) {
         saved.enableAudioCapture = true;
         setLocal("enableAudioCapture", saved.enableAudioCapture);
@@ -869,7 +869,7 @@ document.getElementById("enableaudiocapture").addEventListener("change", () => {
 
 document
     .getElementById("enableaudiovisualizer")
-    .addEventListener("change", () => {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.enableAudioVisualizer = true;
             setLocal("enableAudioVisualizer", saved.enableAudioVisualizer);
@@ -886,7 +886,7 @@ document
         }
     });
 
-document.getElementById("enablebackground").addEventListener("change", () => {
+document.getElementById("enablebackground").addEventListener("change", function () {
     if (this.checked) {
         saved.enableBackground = true;
         setLocal("enableBackground", saved.enableBackground);
@@ -900,7 +900,7 @@ document.getElementById("enablebackground").addEventListener("change", () => {
 
 document
     .getElementById("enablehideinterface")
-    .addEventListener("change", () => {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.enableHideInterface = true;
             setLocal("enableHideInterface", saved.enableHideInterface);
@@ -920,7 +920,7 @@ document
 
 document
     .getElementById("enablenotifybpmchanges")
-    .addEventListener("change", () => {
+    .addEventListener("change", function () {
         if (this.checked) {
             saved.enableNotifyBpmChanges = true;
             setLocal("enableNotifyBpmChanges", saved.enableNotifyBpmChanges);
@@ -930,7 +930,7 @@ document
         }
     });
 
-document.getElementById("enablehpbar").addEventListener("change", () => {
+document.getElementById("enablehpbar").addEventListener("change", function () {
     if (this.checked) {
         saved.enableHpBar = true;
         setLocal("enableHpBar", saved.enableHpBar);
@@ -941,7 +941,7 @@ document.getElementById("enablehpbar").addEventListener("change", () => {
     }
 });
 
-document.getElementById("enablevoid").addEventListener("change", () => {
+document.getElementById("enablevoid").addEventListener("change", function () {
     if (this.checked) {
         setTimeout(() => {
             this.checked = false;
@@ -949,7 +949,7 @@ document.getElementById("enablevoid").addEventListener("change", () => {
     }
 });
 
-document.getElementById("enablekeyoverlay").addEventListener("change", () => {
+document.getElementById("enablekeyoverlay").addEventListener("change", function () {
     if (this.checked) {
         saved.enableKeyOverlay = true;
         setLocal("enableKeyOverlay", saved.enableKeyOverlay);
@@ -962,7 +962,7 @@ document.getElementById("enablekeyoverlay").addEventListener("change", () => {
     }
 });
 
-document.getElementById("keyhidegameui").addEventListener("change", () => {
+document.getElementById("keyhidegameui").addEventListener("change", function () {
     if (this.checked) {
         saved.key.hideGameUI = true;
         setLocal("key", saved.key);
@@ -973,7 +973,7 @@ document.getElementById("keyhidegameui").addEventListener("change", () => {
     hideGameUIRefresh();
 });
 
-document.getElementById("keyall").addEventListener("change", () => {
+document.getElementById("keyall").addEventListener("change", function () {
     if (this.checked) {
         saved.key.all = true;
         setLocal("key", saved.key);
@@ -983,7 +983,7 @@ document.getElementById("keyall").addEventListener("change", () => {
     }
 });
 
-document.getElementById("keyinvert").addEventListener("change", () => {
+document.getElementById("keyinvert").addEventListener("change", function () {
     if (this.checked) {
         saved.key.invert = true;
         setLocal("key", saved.key);
@@ -993,7 +993,7 @@ document.getElementById("keyinvert").addEventListener("change", () => {
     }
 });
 
-document.getElementById("keymerge").addEventListener("change", () => {
+document.getElementById("keymerge").addEventListener("change", function () {
     if (this.checked) {
         saved.key.merge = true;
         setLocal("key", saved.key);
@@ -1004,7 +1004,7 @@ document.getElementById("keymerge").addEventListener("change", () => {
 });
 
 document.querySelectorAll(".keysliders").forEach((slider) => {
-    slider.addEventListener("input", () => {
+    slider.addEventListener("input", function () {
         const outputs = document.querySelectorAll(".keyslidersoutputs");
         let output;
         if (this.id === "keyX") {
@@ -1029,7 +1029,7 @@ document.querySelectorAll(".keysliders").forEach((slider) => {
         output.textContent = this.value;
         setLocal("key", saved.key);
     });
-    slider.addEventListener("mousedown", () => {
+    slider.addEventListener("mousedown", function () {
         document.getElementById("keyoverlay").classList.add("dragging");
         document.getElementById("setting").style.backgroundColor =
             "rgba(10, 10, 10, 0.5)";
@@ -1037,7 +1037,7 @@ document.querySelectorAll(".keysliders").forEach((slider) => {
 });
 
 document.querySelectorAll('input[name="urposition"]').forEach((radio) => {
-    radio.addEventListener("change", () => {
+    radio.addEventListener("change", function () {
         if (this.value === "top") {
             saved.timing.urPosition = "top";
         } else if (this.value === "bottom") {

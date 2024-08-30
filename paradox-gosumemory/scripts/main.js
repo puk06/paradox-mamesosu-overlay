@@ -813,8 +813,6 @@ const audioControl = setInterval(() => {
 
                 consecutiveCount = 0;
                 audioError.style.opacity = 0;
-                audiostatus.innerHTML = "";
-                audiostatus.classList = "popup";
                 audiostatus.style.opacity = 1;
                 artworkDim.style.opacity = 1;
             }
@@ -825,11 +823,9 @@ const audioControl = setInterval(() => {
                 } catch (error) {
                     console.log(error);
                 }
-
+                
                 playingCount = 0;
                 audioError.style.opacity = 0;
-                audiostatus.innerHTML = "";
-                audiostatus.classList = "popupfade";
                 audiostatus.style.opacity = 0;
                 artworkDim.style.opacity = 0;
             }
