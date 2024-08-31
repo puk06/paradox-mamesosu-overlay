@@ -18,7 +18,10 @@ ws.onmessage = (wsEvent) => {
         /*receive*/
         Object.assign(tokenValue, JSON.parse(wsEvent.data));
 
-        if (firstLoadOverlay) reloadUserData();
+        if (firstLoadOverlay) {
+            reloadUserData();
+            firstLoadOverlay = false;
+        }
 
         tokenValue.audio.fullPath = encodeURIComponent(
             `${tokenValue.dir}/${tokenValue.mp3Name}`,
