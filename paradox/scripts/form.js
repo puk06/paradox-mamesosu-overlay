@@ -423,8 +423,9 @@ function GetLevelPrecise(score) {
 
 function initializeSetting() {
     document.getElementById("apikey").value = saved.apiKey;
-    document.getElementById("enableaudiocapture").checked = saved.enableAudioCapture;
+    document.getElementById("banchomode").checked = saved.banchoMode;
     reloadUserData();
+    document.getElementById("enableaudiocapture").checked = saved.enableAudioCapture;
     document.getElementById("enableaudiovisualizer").checked =
         saved.enableAudioVisualizer;
     document
@@ -850,6 +851,16 @@ window.addEventListener("mouseup", function () {
     document.getElementById("keyoverlay").classList.remove("dragging");
     document.getElementById("setting").style.backgroundColor =
         "rgba(10, 10, 10, 0.95)";
+});
+
+document.getElementById("banchomode").addEventListener("change", function () {
+    if (this.checked) {
+        saved.banchomode = true;
+        setLocal("banchomode", saved.banchomode);
+    } else {
+        saved.banchomode = false;
+        setLocal("banchomode", saved.banchomode);
+    }
 });
 
 document.getElementById("enableaudiocapture").addEventListener("change", function () {

@@ -3,6 +3,7 @@ let isLatest;
 
 let saved = {
     apiKey: null,
+    banchomode: false,
     warning: true,
     enableAudioCapture: false,
     enableAudioVisualizer: false,

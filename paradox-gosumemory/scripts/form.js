@@ -413,6 +413,7 @@ function GetLevelPrecise(score) {
 
 function initializeSetting() {
     document.getElementById("userid").value = saved.username;
+    document.getElementById("banchomode").checked = saved.banchomode;
     document.getElementById("apikey").value = saved.apiKey;
     reloadUserData();
     document.getElementById("enableaudiocapture").checked =
@@ -842,6 +843,16 @@ window.addEventListener("mouseup", function () {
     document.getElementById("keyoverlay").classList.remove("dragging");
     document.getElementById("setting").style.backgroundColor =
         "rgba(10, 10, 10, 0.95)";
+});
+
+document.getElementById("banchomode").addEventListener("change", function () {
+    if (this.checked) {
+        saved.banchoMode = true;
+        setLocal("banchoMode", saved.banchomode);
+    } else {
+        saved.banchoMode = false;
+        setLocal("banchoMode", saved.banchomode);
+    }
 });
 
 document.getElementById("enableaudiocapture").addEventListener("change", function () {
