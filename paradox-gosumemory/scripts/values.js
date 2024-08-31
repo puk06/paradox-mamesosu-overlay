@@ -288,7 +288,7 @@ let cache = {
     background: {
         fullPath: "",
     },
-    modsArray: [],
+    modsArray: null,
     username: "",
     artistRoman: "",
     artistUnicode: "",
