@@ -57,7 +57,7 @@ Note that PP Calculator will close by itself if Gosumemory is not running.
 
 5. Right-click on the browser you just added from within the source and select **Dialog** to open another window. Click in the window to bring up the settings window.
 
-6. To retrieve user information, go to Settings and enter your osu! Username or ID in the “osu!
+6. To retrieve user information, go to Settings and enter your osu! Username or ID in the “osu! Username or ID”
 
 (If Bancho Mode is enabled, enter your Bancho username, if not, enter your Mamestagram username.)
 
