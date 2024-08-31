@@ -552,9 +552,10 @@ ws.onmessage = (wsEvent) => {
         /*mods*/
         if (cache.mods !== tokenValue.mods) {
             cache.mods = tokenValue.mods;
+            cache.modsArray = tokenValue.modsArray;
             mods.innerHTML = "";
+
             let modsApplied = cache.modsArray;
-            cache.modsArray = modsApplied;
 
             if (!modsApplied[0]) {
                 modsApplied.push("NM");
