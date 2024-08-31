@@ -415,7 +415,7 @@ function convertGosumemoryDataForm(data) {
         mAR: data.menu.bm.stats.AR,
         mOD: data.menu.bm.stats.OD,
         mHP: data.menu.bm.stats.HP,
-        mods: data.menu.mods.str,
+        mods: data.menu.mods.num,
         mp3Name: data.menu.bm.path.audio,
         rankedStatus: data.menu.bm.rankedStatus,
         rawStatus: data.menu.state,

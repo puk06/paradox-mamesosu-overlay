@@ -24,7 +24,6 @@ ws.onmessage = (wsEvent) => {
         /*time*/
         cache.time = tokenValue.time;
 
-        console.log(tokenValue);
         Object.assign(tokenValue, tokenValue.keyOverlay);
         if (saved.enableHpBar === true && tokenValue.rawStatus === 2) {
             document.documentElement.style.setProperty(
@@ -112,7 +111,7 @@ ws.onmessage = (wsEvent) => {
                     mods.style.right = box1.scrollWidth + 20 + "px";
 
                     let unstableRateValue = tokenValue.convertedUnstableRate;
-                    const modsApplied = cache.mods.split(",");
+                    const modsApplied = cache.modsArray;
 
                     if (
                         modsApplied.includes("DT") ||
@@ -148,7 +147,7 @@ ws.onmessage = (wsEvent) => {
             mods.style.right = box1.scrollWidth + 20 + "px";
 
             let unstableRateValue = tokenValue.convertedUnstableRate;
-            const modsApplied = cache.mods.split(",");
+            const modsApplied = cache.modsArray;
 
             if (
                 modsApplied.includes("DT") ||
@@ -554,7 +553,7 @@ ws.onmessage = (wsEvent) => {
         if (cache.mods !== tokenValue.mods) {
             cache.mods = tokenValue.mods;
             mods.innerHTML = "";
-            let modsApplied = cache.mods.split(",");
+            let modsApplied = cache.modsArray;
             cache.modsArray = modsApplied;
 
             if (!modsApplied[0]) {
