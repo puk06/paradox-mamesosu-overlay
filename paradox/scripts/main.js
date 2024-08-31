@@ -1,5 +1,3 @@
-let firstLoadOverlay = true;
-
 let ws = new WebSocket(
     `ws://${hostname}:${port}/tokens?LiveTokens&updatesPerSecond=20`,
 );
@@ -17,11 +15,6 @@ ws.onmessage = (wsEvent) => {
     try {
         /*receive*/
         Object.assign(tokenValue, JSON.parse(wsEvent.data));
-
-        if (firstLoadOverlay) {
-            reloadUserData();
-            firstLoadOverlay = false;
-        }
 
         tokenValue.audio.fullPath = encodeURIComponent(
             `${tokenValue.dir}/${tokenValue.mp3Name}`,
