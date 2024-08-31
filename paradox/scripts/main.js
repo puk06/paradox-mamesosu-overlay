@@ -736,10 +736,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function drawClock(canvas, ctx) {
     ctx.reset();
-    const progress = (
-        (tokenValue.time / tokenValue.totaltime) *
-        100000
-    ).toFixed(2);
+    const progress = Math.round((tokenValue.time / tokenValue.totaltime) * 10000) / 100;
     const center = canvas.width / 2;
     const startAngle = -Math.PI / 2;
     const currentTimeAngle = (3.6 * progress * Math.PI) / 180;
