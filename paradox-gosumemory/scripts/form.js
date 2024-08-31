@@ -224,17 +224,10 @@ function setAPIValue(banchoMode) {
             document.getElementById("detailleft"),
         ]);
 
-        if (user === tokenValue.banchoId) {
-            showElement([
-                document.getElementById("paddingright"),
-                document.getElementById("detailright"),
-            ]);
-        } else {
-            hideElement([
-                document.getElementById("paddingright"),
-                document.getElementById("detailright"),
-            ]);
-        }
+        showElement([
+            document.getElementById("paddingright"),
+            document.getElementById("detailright"),
+        ]);
     }, 250);
 }
 
