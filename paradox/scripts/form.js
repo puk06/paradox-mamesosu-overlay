@@ -424,7 +424,6 @@ function GetLevelPrecise(score) {
 function initializeSetting() {
     document.getElementById("apikey").value = saved.apiKey;
     document.getElementById("banchomode").checked = saved.banchomode;
-    reloadUserData();
     document.getElementById("enableaudiocapture").checked = saved.enableAudioCapture;
     document.getElementById("enableaudiovisualizer").checked =
         saved.enableAudioVisualizer;
