@@ -848,10 +848,10 @@ window.addEventListener("mouseup", function () {
 document.getElementById("banchomode").addEventListener("change", function () {
     if (this.checked) {
         saved.banchoMode = true;
-        setLocal("banchoMode", saved.banchomode);
+        setLocal("banchomode", saved.banchomode);
     } else {
         saved.banchoMode = false;
-        setLocal("banchoMode", saved.banchomode);
+        setLocal("banchomode", saved.banchomode);
     }
 });
 
