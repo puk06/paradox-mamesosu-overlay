@@ -847,10 +847,10 @@ window.addEventListener("mouseup", function () {
 
 document.getElementById("banchomode").addEventListener("change", function () {
     if (this.checked) {
-        saved.banchoMode = true;
+        saved.banchomode = true;
         setLocal("banchomode", saved.banchomode);
     } else {
-        saved.banchoMode = false;
+        saved.banchomode = false;
         setLocal("banchomode", saved.banchomode);
     }
 });
