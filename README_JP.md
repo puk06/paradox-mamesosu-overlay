@@ -39,7 +39,7 @@
 
 2.外付けのPP Calculatorを次にビルドします。[Node.js](https://nodejs.org/)をインストールし、コマンドプロンプトで以下のコマンドを実行します。
 ```bash
-cd "インストールしたフォルダのパス/PP-Calculator for gosumemory"
+cd "インストールしたフォルダのパス/PP-Calculator"
 npm install
 ```
 
