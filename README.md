@@ -42,7 +42,7 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 
 2. Next, build the external PP Calculator. Install [Node.js](https://nodejs.org/) and execute the following command at the command prompt.
 ```bash
-cd "path of installed folder/PP-Calculator for gosumemory"
+cd "path of installed folder/PP-Calculator"
 npm install
 ````
 
