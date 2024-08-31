@@ -23,6 +23,7 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 ## How to use (with OBS Studio)
 ### What you need to install in advance (StreamCompanion version)
 [OBS Studio (Open Broadcanst Software®)](https://obsproject.com/)
+
 [StreamCompanion](https://github.com/Piotrekol/StreamCompanion)
 
 ### Procedure
@@ -34,7 +35,9 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 
 ### What you need to install in advance (Gosumemory version)
 [OBS Studio (Open Broadcanst Software®)](https://obsproject.com/)
+
 [Gosumemory](https://github.com/l3lackShark/gosumemory)
+
 [Node.js](https://nodejs.org/)
 
 ### Procedure
