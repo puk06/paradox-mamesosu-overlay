@@ -1,0 +1,16 @@
+{
+    "name": "pp-calculator",
+    "version": "1.0.0",
+    "description": "PP Calculator for Gosumemory",
+    "main": "PP Calculator.js",
+    "author": "Hoshino1",
+    "license": "MIT",
+    "dependencies": {
+        "cargo-cp-artifact": "^0.1.9",
+        "mamestagram-pp-js": "git+ssh://git@github.com/puk06/mamestagram-pp-js.git",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/ws": "^8.5.12"
+    }
+}
