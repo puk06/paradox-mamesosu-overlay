@@ -27,7 +27,7 @@ Forked from: [Paradox Overlay](https://github.com/mofuries/paradox-osu-overlay)
 [StreamCompanion](https://github.com/Piotrekol/StreamCompanion)
 
 ### Procedure
-1. [Download](https://github.com/mofuries/paradox-osu-overlay/archive/refs/heads/main.zip) the main unit, and change the **paradox** folder to **StreamCompanion** Move the **paradox** folder into the **StreamCompanion\Web\overlays** folder. It is OK if the folder looks like **StreamCompanion\Files\Web\overlays\paradox**.
+1. [Download](https://github.com/puk06/paradox-mamesosu-overlay/archive/refs/heads/main.zip) the main unit, and change the **paradox** folder to **StreamCompanion** Move the **paradox** folder into the **StreamCompanion\Web\overlays** folder. It is OK if the folder looks like **StreamCompanion\Files\Web\overlays\paradox**.
 
 2. Start OBS Studio, select Browser from Add Source, and enter [**http://localhost:20727/overlays/paradox/**](http://localhost:20727/overlays/paradox/) in the property URL. in the property URL.” Check “**OBS to control audio**”, “**Shut down source when not displayed**”, and “**Update browser display when scene is active**” and press OK to close properties.
 
