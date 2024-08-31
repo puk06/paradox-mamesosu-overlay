@@ -20,6 +20,7 @@
 ## 使用方法（OBS Studioを使用）
 ### 事前にインストールする必要があるもの (StreamCompanion版)
 ・[OBS Studio(Open Broadcanst Software®)](https://obsproject.com/)
+
 ・[StreamCompanion](https://github.com/Piotrekol/StreamCompanion)
 
 ### 手順
@@ -31,7 +32,9 @@
 
 ### 事前にインストールする必要があるもの (Gosumemory版)
 ・[OBS Studio(Open Broadcanst Software®)](https://obsproject.com/)
+
 ・[Gosumemory](https://github.com/l3lackShark/gosumemory)
+
 ・[Node.js](https://nodejs.org/)
 
 ### 手順
