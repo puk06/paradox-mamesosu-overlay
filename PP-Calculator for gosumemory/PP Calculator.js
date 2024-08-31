@@ -326,6 +326,7 @@ server.on("connection", (socket) => {
         setInterval(() => {
             const Data = convertGosumemoryDataForm(rawgosumemoryData);
             const gosumemoryData = Object.assign(Data, PPData);
+            
             if (gosumemoryData.grade == "") {
                 if (gosumemoryData.modsArray.includes("HD") || gosumemoryData.modsArray.includes("FL")) {
                     gosumemoryData.grade = "SSH";
