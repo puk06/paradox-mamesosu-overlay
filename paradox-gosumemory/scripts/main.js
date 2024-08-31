@@ -209,11 +209,38 @@ ws.onmessage = (wsEvent) => {
             const liveStarsDecimal = liveStarsParts[1];
             SR.innerHTML = `${liveStarsInteger}<span id="dot">.</span><span id="srdecimal">${liveStarsDecimal}</span>`;
 
-            const liveStarsValue = parseFloat(
-                tokenValue.liveStarRating.toFixed(2),
-            );
+            const liveStarsValue = Math.round(
+                tokenValue.liveStarRating * 100
+            ) / 100;
+
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
+                    document.documentElement.style.setProperty(
+                        "--mdiffcolor",
+                        mdiffcolor,
+                    );
+                    document.documentElement.style.setProperty(
+                        "--mtextcolor",
+                        mtextcolor,
+                    );
+                    break;
+                }
+            }
+        } else {
+            const mStarsParts = tokenValue.mStars.toFixed(2).split(".");
+            const mStarsInteger = mStarsParts[0];
+            const mStarsDecimal = mStarsParts[1];
+            SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
+            const mStarsValue = Math.round(
+                tokenValue.mStars * 100
+            ) / 100;
+
+            for (const {
+                threshold,
+                mdiffcolor,
+                mtextcolor,
+            } of SRColors) {
+                if (mStarsValue >= threshold) {
                     document.documentElement.style.setProperty(
                         "--mdiffcolor",
                         mdiffcolor,
@@ -506,34 +533,6 @@ ws.onmessage = (wsEvent) => {
                         const element = document.getElementById(details[i]);
                         element.innerHTML = tokenValue[details[i + 4]];
                         element.style.color = "#ffffff";
-                    }
-                }
-                const mStarsParts = tokenValue.mStars.toFixed(2).split(".");
-                const mStarsInteger = mStarsParts[0];
-                const mStarsDecimal = mStarsParts[1];
-
-                if (!isPlaying) {
-                    SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-                    const mStarsValue = parseFloat(
-                        tokenValue.mStars.toFixed(2),
-                    );
-
-                    for (const {
-                        threshold,
-                        mdiffcolor,
-                        mtextcolor,
-                    } of SRColors) {
-                        if (mStarsValue >= threshold) {
-                            document.documentElement.style.setProperty(
-                                "--mdiffcolor",
-                                mdiffcolor,
-                            );
-                            document.documentElement.style.setProperty(
-                                "--mtextcolor",
-                                mtextcolor,
-                            );
-                            break;
-                        }
                     }
                 }
 
