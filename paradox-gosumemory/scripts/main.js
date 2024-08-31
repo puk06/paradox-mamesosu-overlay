@@ -142,7 +142,7 @@ ws.onmessage = (wsEvent) => {
             cache.rawStatus = tokenValue.rawStatus;
         }
 
-        /*pp*/
+        /*pp sr*/
         if (isPlaying === true) {
             mods.style.right = box1.scrollWidth + 20 + "px";
 
