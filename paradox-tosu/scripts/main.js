@@ -587,7 +587,11 @@ ws.onmessage = (wsEvent) => {
             audiostatus.style.opacity = 0;
             playingCount = 0;
             cache.audio.fullPath = tokenValue.audio.fullPath;
-            audioElement.src = `http://${hostname}:${port}/Songs/${tokenValue.audio.fullPath}?a=${Math.random(10000)}`;
+            audioElement.src = `http://${hostname}:${port}/Songs/${tokenValue.audio.fullPath}`;
+            //test
+            console.log(
+                `http://${hostname}:${port}/Songs/${tokenValue.audio.fullPath}`,
+            );
         }
 
         /*bg*/
@@ -732,10 +736,10 @@ function drawClock(canvas, ctx) {
 }
 
 const audioControl = setInterval(() => {
-    adjustedTime = (cache.time + 0.1).toFixed(2);
-    timeDifference = Math.abs(audioElement.currentTime - adjustedTime).toFixed(
-        2,
-    );
+    adjustedTime = (cache.time / 1000 + 0.1).toFixed(2);
+    timeDifference = Math.abs(
+        audioElement.currentTime / 1000 - adjustedTime,
+    ).toFixed(2);
 
     if (audioStopped === false && saved.enableAudioCapture === true) {
         if (cache.rawStatus === 2) {
