@@ -147,15 +147,9 @@ ws.onmessage = (wsEvent) => {
                 const mStarsInteger = mStarsParts[0];
                 const mStarsDecimal = mStarsParts[1];
                 SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-                const mStarsValue = Math.round(
-                    tokenValue.mStars * 100
-                ) / 100;
+                const mStarsValue = Math.round(tokenValue.mStars * 100) / 100;
 
-                for (const {
-                    threshold,
-                    mdiffcolor,
-                    mtextcolor,
-                } of SRColors) {
+                for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                     if (mStarsValue >= threshold) {
                         document.documentElement.style.setProperty(
                             "--mdiffcolor",
@@ -241,9 +235,8 @@ ws.onmessage = (wsEvent) => {
             const liveStarsDecimal = liveStarsParts[1];
             SR.innerHTML = `${liveStarsInteger}<span id="dot">.</span><span id="srdecimal">${liveStarsDecimal}</span>`;
 
-            const liveStarsValue = Math.round(
-                tokenValue.liveStarRating * 100
-            ) / 100;
+            const liveStarsValue =
+                Math.round(tokenValue.liveStarRating * 100) / 100;
 
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
@@ -538,15 +531,9 @@ ws.onmessage = (wsEvent) => {
                 const mStarsInteger = mStarsParts[0];
                 const mStarsDecimal = mStarsParts[1];
                 SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-                const mStarsValue = Math.round(
-                    tokenValue.mStars * 100
-                ) / 100;
+                const mStarsValue = Math.round(tokenValue.mStars * 100) / 100;
 
-                for (const {
-                    threshold,
-                    mdiffcolor,
-                    mtextcolor,
-                } of SRColors) {
+                for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                     if (mStarsValue >= threshold) {
                         document.documentElement.style.setProperty(
                             "--mdiffcolor",
@@ -633,7 +620,7 @@ ws.onmessage = (wsEvent) => {
             audiostatus.style.opacity = 0;
             playingCount = 0;
             cache.audio.fullPath = tokenValue.audio.fullPath;
-            audioElement.src = `http://${hostname}:${port}/Songs/${tokenValue.audio.fullPath}?a=${Math.random(10000)}`;
+            audioElement.src = `http://${hostname}:${port}/Songs/${tokenValue.audio.fullPath}`;
         }
 
         /*bg*/
@@ -643,7 +630,7 @@ ws.onmessage = (wsEvent) => {
         ) {
             backgroundReady = false;
             cache.background.fullPath = tokenValue.background.fullPath;
-            currentBG.src = `http://${hostname}:${port}/Songs/${tokenValue.background.fullPath}?a=${Math.random(10000)}`;
+            currentBG.src = `http://${hostname}:${port}/Songs/${tokenValue.background.fullPath}`;
         }
     } catch (err) {
         console.log(err);
@@ -764,7 +751,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function drawClock(canvas, ctx) {
     ctx.reset();
-    let progress = Math.round(tokenValue.time / tokenValue.totaltime * 10000000) / 100;
+    let progress =
+        Math.round((tokenValue.time / tokenValue.totaltime) * 10000000) / 100;
     if (tokenValue.time < 0) progress = 0;
     const center = canvas.width / 2;
     const startAngle = -Math.PI / 2;
