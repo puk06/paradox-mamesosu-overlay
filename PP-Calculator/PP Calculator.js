@@ -39,7 +39,6 @@ const rawgosumemoryData = {
     convertedUnstableRate: 0,
     dir: "",
     backgroundImageFileName: "",
-    skin: "",
     currentBpm: 0,
     grade: "",
     playerHpSmooth: 0,
@@ -65,12 +64,12 @@ const rawgosumemoryData = {
     rankedStatus: 0,
     rawStatus: 0,
     totalAudioTime: 0,
-    osuIsRunning: 1
+    osuIsRunning: 1,
 };
 const PPData = {
     mStars: 0,
     liveStarRating: 0,
-    ppIfMapEndsNow: 0
+    ppIfMapEndsNow: 0,
 };
 
 let currentMode;
@@ -277,15 +276,25 @@ function Main() {
                             break;
                     }
 
-                    const calc = new Calculator(score).passedObjects(passedObjects).performance(map);
-                    const calcss = new Calculator(scoreforsspp).performance(map).difficulty;
+                    const calc = new Calculator(score)
+                        .passedObjects(passedObjects)
+                        .performance(map);
+                    const calcss = new Calculator(scoreforsspp).performance(
+                        map,
+                    ).difficulty;
 
                     let pp = calc.pp;
                     if (isNaN(pp)) pp = 0;
 
                     let sr = calc.difficulty.stars;
-                    if (isNaN(sr) ||(dataobject.status == 2 &&passedObjects == 0 &&!istesting)) sr = 0;
-                        
+                    if (
+                        isNaN(sr) ||
+                        (dataobject.status == 2 &&
+                            passedObjects == 0 &&
+                            !istesting)
+                    )
+                        sr = 0;
+
                     let fullsr = calcss.stars;
                     if (isNaN(fullsr)) fullsr = 0;
 
@@ -319,35 +328,42 @@ function Main() {
     }, 20);
 })();
 
-
 server.on("connection", (socket) => {
     console.log("Client Connected");
     socket.on("message", () => {
         setInterval(() => {
             const Data = convertGosumemoryDataForm(rawgosumemoryData);
             const gosumemoryData = Object.assign(Data, PPData);
-            
+
             if (gosumemoryData.grade == "") {
-                if (gosumemoryData.modsArray.includes("HD") || gosumemoryData.modsArray.includes("FL")) {
+                if (
+                    gosumemoryData.modsArray.includes("HD") ||
+                    gosumemoryData.modsArray.includes("FL")
+                ) {
                     gosumemoryData.grade = "SSH";
                 } else {
                     gosumemoryData.grade = "SS";
                 }
             }
 
-            if (gosumemoryData.modsArray.includes("DT") || gosumemoryData.modsArray.includes("NC")) {
+            if (
+                gosumemoryData.modsArray.includes("DT") ||
+                gosumemoryData.modsArray.includes("NC")
+            ) {
                 gosumemoryData.bpm *= 1.5;
                 gosumemoryData.mBpm *= 1.5;
             }
-            
+
             socket.send(JSON.stringify(gosumemoryData));
         }, 10);
     });
 });
 
 ws.onopen = () => console.log("Gosumemory Websocket Successfully Connected");
-ws.onclose = (event) => console.log("Gosumemory Websocket Socket Closed Connection: ", event);
-ws.onerror = (error) => console.log("Gosumemory WebsocketS Socket Error: ", error);
+ws.onclose = (event) =>
+    console.log("Gosumemory Websocket Socket Closed Connection: ", event);
+ws.onerror = (error) =>
+    console.log("Gosumemory WebsocketS Socket Error: ", error);
 ws.onmessage = (wsEvent) => {
     try {
         const data = JSON.parse(wsEvent.data);
@@ -393,7 +409,6 @@ function convertGosumemoryDataForm(data) {
         convertedUnstableRate: data.gameplay.hits.unstableRate,
         dir: data.menu.bm.path.folder,
         backgroundImageFileName: data.menu.bm.path.bg,
-        skin: data.settings.folders.skin,
         currentBpm: data.menu.bm.stats.BPM.max,
         banchoId: 1,
         grade: data.gameplay.hits.grade.current,

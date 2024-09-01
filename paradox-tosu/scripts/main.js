@@ -566,11 +566,6 @@ ws.onmessage = (wsEvent) => {
             cache.banchoId = tokenValue.banchoId;
         }
 
-        if (cache.skin !== tokenValue.skin) {
-            cache.skin = tokenValue.skin;
-            skinBG.src = `http://${hostname}:${port}/Skins/${encodeURIComponent(tokenValue.skin)}/${encodeURIComponent("menu-background.jpg")}`;
-        }
-
         if (cache.osuIsRunning !== tokenValue.osuIsRunning) {
             cache.osuIsRunning = tokenValue.osuIsRunning;
             if (tokenValue.osuIsRunning === 0) {
@@ -607,8 +602,8 @@ currentBG.onload = () => {
         currentBG.src ===
             `http://${hostname}:${port}/overlays/paradox-tosu/assets/loading.png`
     ) {
-        if (skinBG.naturalWidth !== 0) {
-            currentBG.src = skinBG.src;
+        if (defaultBG.naturalWidth !== 0) {
+            currentBG.src = defaultBG.src;
         } else {
             currentBG.src = "./assets/nobg.png";
         }
@@ -852,7 +847,6 @@ function convertTosuDataForm(data) {
         convertedUnstableRate: data.gameplay.hits.unstableRate,
         dir: data.menu.bm.path.folder,
         backgroundImageFileName: data.menu.bm.path.bg,
-        skin: data.settings.folders.skin,
         currentBpm: data.menu.bm.stats.BPM.max,
         banchoId: data.userProfile.id,
         grade: data.gameplay.hits.grade.current,

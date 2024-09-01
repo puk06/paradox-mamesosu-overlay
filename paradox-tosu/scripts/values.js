@@ -126,7 +126,8 @@ const audioElement = document.getElementById("audio");
 const currentBG = new Image();
 const panelImage = new Image();
 const customImage = new Image();
-const skinBG = new Image();
+const defaultBG = new Image();
+defaultBG.src = "./assets/default-BG.jpg";
 
 const virtual = document.createElement("canvas");
 const ctx_virtual = virtual.getContext("2d", {
@@ -304,7 +305,6 @@ let cache = {
     convertedUnstableRate: "",
     dir: "",
     backgroundImageFileName: "",
-    skin: "",
     currentBpm: 100,
     banchoId: "",
     grade: "",

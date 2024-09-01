@@ -582,11 +582,6 @@ ws.onmessage = (wsEvent) => {
             cache.banchoId = tokenValue.banchoId;
         }
 
-        if (cache.skin !== tokenValue.skin) {
-            cache.skin = tokenValue.skin;
-            skinBG.src = `http://${hostname}:${port}/Skins/${encodeURIComponent(tokenValue.skin)}/${encodeURIComponent("menu-background.jpg")}`;
-        }
-
         if (cache.osuIsRunning !== tokenValue.osuIsRunning) {
             cache.osuIsRunning = tokenValue.osuIsRunning;
             if (tokenValue.osuIsRunning === 0) {
@@ -623,8 +618,8 @@ currentBG.onload = () => {
         currentBG.src ===
             `http://${hostname}:${port}/paradox-gosumemory/assets/loading.png`
     ) {
-        if (skinBG.naturalWidth !== 0) {
-            currentBG.src = skinBG.src;
+        if (defaultBG.naturalWidth !== 0) {
+            currentBG.src = defaultBG.src;
         } else {
             currentBG.src = "./assets/nobg.png";
         }
