@@ -120,12 +120,9 @@ ws.onmessage = (wsEvent) => {
                         modsApplied.includes("Nightcore")
                     ) {
                         unstableRateValue *= 1.5;
-                        unstableRateValue = `${unstableRateValue.toFixed(2)} (${tokenValue.convertedUnstableRate.toFixed(2)})`;
-                    } else {
-                        unstableRateValue = unstableRateValue.toFixed(2);
                     }
 
-                    unstableRate.innerHTML = unstableRate;
+                    unstableRate.innerHTML = unstableRateValue.toFixed(2);
                     item1.innerHTML = `<span id="score">${addCommasToNumber(tokenValue.score)}</span>`;
                     item2.innerHTML = "";
                     item3.innerHTML = `<span id="acc">${tokenValue.acc.toFixed(2)}<span class="colored margin">%</span></span>`;
@@ -179,12 +176,9 @@ ws.onmessage = (wsEvent) => {
                 modsApplied.includes("Nightcore")
             ) {
                 unstableRateValue *= 1.5;
-                unstableRateValue = `${unstableRateValue.toFixed(2)} (${tokenValue.convertedUnstableRate.toFixed(2)})`;
-            } else {
-                unstableRateValue = unstableRateValue.toFixed(2);
             }
 
-            unstableRate.innerHTML = unstableRateValue;
+            unstableRate.innerHTML = unstableRateValue.toFixed(2);
             item1.innerHTML = `<span id="score">${addCommasToNumber(tokenValue.score)}</span>`;
             item2.innerHTML = "";
             item3.innerHTML = `<span id="acc">${tokenValue.acc.toFixed(2)}<span class="colored hilight margin">%</span></span>`;
