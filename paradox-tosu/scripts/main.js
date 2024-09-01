@@ -70,7 +70,7 @@ ws.onmessage = (wsEvent) => {
                 setTimeout(() => {
                     reloadUserData(tokenValue.username);
                     interfaceShow();
-                }, 1000);
+                }, 500);
             }
 
             if (tokenValue.rawStatus === 2) {
