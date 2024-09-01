@@ -228,16 +228,15 @@ const modsImgs = {
 };
 
 const gradeImgs = {
-    0: "./assets/SSH.svg",
-    1: "./assets/SH.svg",
-    2: "./assets/SS.svg",
-    3: "./assets/S.svg",
-    4: "./assets/A.svg",
-    5: "./assets/B.svg",
-    6: "./assets/C.svg",
-    7: "./assets/D.svg",
-    8: "./assets/none.png",
-    9: "./assets/none.png",
+    SSH: "./assets/SSH.svg",
+    SH: "./assets/SH.svg",
+    SS: "./assets/SS.svg",
+    S: "./assets/S.svg",
+    A: "./assets/A.svg",
+    B: "./assets/B.svg",
+    C: "./assets/C.svg",
+    D: "./assets/D.svg",
+    default: "./assets/none.png",
 };
 
 let prevTime = null;
@@ -329,7 +328,7 @@ let cache = {
     mAR: 0,
     mOD: 0,
     mHP: 0,
-    mods: 0,
+    mods: null,
     mp3Name: 0,
     mStars: 0,
     liveStarRating: 0,

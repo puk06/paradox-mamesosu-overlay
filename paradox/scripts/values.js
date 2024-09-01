@@ -329,7 +329,7 @@ let cache = {
     mAR: 0,
     mOD: 0,
     mHP: 0,
-    mods: 0,
+    mods: null,
     mp3Name: 0,
     mStars: 0,
     liveStarRating: 0,

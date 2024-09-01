@@ -13,7 +13,6 @@ ws.onmessage = (wsEvent) => {
     try {
         /*receive*/
         Object.assign(tokenValue, convertTosuDataForm(JSON.parse(wsEvent.data)));
-        console.log(tokenValue);
 
         tokenValue.audio.fullPath = encodeURIComponent(
             `${tokenValue.dir}/${tokenValue.mp3Name}`,
@@ -113,7 +112,7 @@ ws.onmessage = (wsEvent) => {
                     mods.style.right = box1.scrollWidth + 20 + "px";
 
                     let unstableRateValue = tokenValue.convertedUnstableRate;
-                    const modsApplied = cache.mods.split(",");
+                    const modsApplied = cache.modsArray;
 
                     if (
                         modsApplied.includes("DT") ||
@@ -148,7 +147,7 @@ ws.onmessage = (wsEvent) => {
             mods.style.right = box1.scrollWidth + 20 + "px";
 
             let unstableRateValue = tokenValue.convertedUnstableRate;
-            const modsApplied = cache.mods.split(",");
+            const modsApplied = cache.modsArray;
 
             if (
                 modsApplied.includes("DT") ||
@@ -248,7 +247,14 @@ ws.onmessage = (wsEvent) => {
             if (tokenValue.rawStatus === 2) {
                 cache.grade = tokenValue.grade;
                 grade.style.opacity = 1;
-                grade.src = gradeImgs[tokenValue.grade];
+                if (
+                    gradeImgs[tokenValue.grade] == undefined ||
+                    tokenValue.grade == ""
+                ) {
+                    grade.src = gradeImgs["default"];
+                } else {
+                    grade.src = gradeImgs[tokenValue.grade];
+                }
             } else {
                 grade.style.opacity = 0;
             }
@@ -478,6 +484,33 @@ ws.onmessage = (wsEvent) => {
                     }
                 }
 
+                const mStarsParts = tokenValue.mStars.toFixed(2).split(".");
+                const mStarsInteger = mStarsParts[0];
+                const mStarsDecimal = mStarsParts[1];
+
+                SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
+                const mStarsValue = Math.round(
+                    tokenValue.mStars * 100
+                ) / 100;
+
+                for (const {
+                    threshold,
+                    mdiffcolor,
+                    mtextcolor,
+                } of SRColors) {
+                    if (mStarsValue >= threshold) {
+                        document.documentElement.style.setProperty(
+                            "--mdiffcolor",
+                            mdiffcolor,
+                        );
+                        document.documentElement.style.setProperty(
+                            "--mtextcolor",
+                            mtextcolor,
+                        );
+                        break;
+                    }
+                }
+
                 mapdetail.style.transition = "all 0s";
                 mapdetail.style.transform = "translateY(-100%)";
 
@@ -494,12 +527,11 @@ ws.onmessage = (wsEvent) => {
         if (cache.mods !== tokenValue.mods) {
             cache.mods = tokenValue.mods;
             mods.innerHTML = "";
-            let modsApplied = cache.mods.split(",");
-            cache.modsArray = modsApplied;
-
-            if (!modsApplied[0]) {
-                modsApplied.push("NM");
+            let modsApplied = tokenValue.modsArray;
+            if (modsApplied == null || modsApplied[0] === "") {
+                modsApplied = ["NM"];
             }
+            cache.modsArray = modsApplied;
 
             if (modsApplied.length === 1) {
                 if (
@@ -572,7 +604,7 @@ currentBG.onload = () => {
     if (
         loadingBGcount === 1 &&
         currentBG.src ===
-            `http://${hostname}:${port}/overlays/paradox/assets/loading.png`
+            `http://${hostname}:${port}/overlays/paradox-tosu/assets/loading.png`
     ) {
         if (skinBG.naturalWidth !== 0) {
             currentBG.src = skinBG.src;
@@ -616,7 +648,7 @@ currentBG.onload = () => {
         ).then(() => {
             if (
                 currentBG.src ===
-                    `http://${hostname}:${port}/overlays/paradox/assets/loading.png` &&
+                    `http://${hostname}:${port}/overlays/paradox-tosu/assets/loading.png` &&
                 loadingBGcount !== 1
             ) {
                 loadingBGcount++;
