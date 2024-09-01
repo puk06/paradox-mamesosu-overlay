@@ -31,7 +31,7 @@ ws.onmessage = (wsEvent) => {
         if (saved.enableHpBar === true && tokenValue.rawStatus === 2) {
             document.documentElement.style.setProperty(
                 "--playerhp",
-                `${(tokenValue.playerHpSmooth ** 2 / 400).toFixed(2) - 1}%`,
+                `${Math.round((tokenValue.playerHpSmooth ** 2 / 400) * 100) / 100 - 1}%`,
             );
         } else {
             document.documentElement.style.setProperty("--playerhp", `0%`);
