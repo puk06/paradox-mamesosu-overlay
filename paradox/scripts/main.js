@@ -760,10 +760,10 @@ function drawClock(canvas, ctx) {
 }
 
 const audioControl = setInterval(() => {
-    adjustedTime = (cache.time + 0.1).toFixed(2);
-    timeDifference = Math.abs(audioElement.currentTime - adjustedTime).toFixed(
-        2,
-    );
+    adjustedTime = Math.round((cache.time + 0.1) * 100) / 100;
+    timeDifference =
+        Math.round(Math.abs(audioElement.currentTime - adjustedTime) * 100) /
+        100;
 
     if (audioStopped === false && saved.enableAudioCapture === true) {
         if (cache.rawStatus === 2) {

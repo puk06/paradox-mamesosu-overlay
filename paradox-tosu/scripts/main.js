@@ -729,10 +729,11 @@ function drawClock(canvas, ctx) {
 }
 
 const audioControl = setInterval(() => {
-    adjustedTime = (cache.time / 1000 + 0.1).toFixed(2);
-    timeDifference = Math.abs(
-        audioElement.currentTime / 1000 - adjustedTime,
-    ).toFixed(2);
+    adjustedTime = adjustedTime = Math.round(((cache.time / 1000) + 0.1) * 100) / 100;
+    timeDifference =
+        Math.round(
+            Math.abs(audioElement.currentTime / 1000 - adjustedTime) * 100,
+        ) / 100;
 
     if (audioStopped === false && saved.enableAudioCapture === true) {
         if (cache.rawStatus === 2) {
@@ -773,23 +774,29 @@ const audioControl = setInterval(() => {
                 !audioElement.paused &&
                 cache.rawStatus !== 7
             ) {
-                audioElement.pause();
+                try {
+                    audioElement.pause();
+                } catch (err) {
+                    console.log(err);
+                }
 
                 consecutiveCount = 0;
-                audioError.style.opacity = 0;
                 audiostatus.innerHTML = "";
-                audiostatus.classList = "popup";
+                audioError.style.opacity = 0;
                 audiostatus.style.opacity = 1;
                 artworkDim.style.opacity = 1;
             }
 
             if (playingCount >= 2 && audioElement.paused) {
-                audioElement.play();
+                try {
+                    audioElement.play();
+                } catch (err) {
+                    console.log(err);
+                }
 
                 playingCount = 0;
-                audioError.style.opacity = 0;
                 audiostatus.innerHTML = "";
-                audiostatus.classList = "popupfade";
+                audioError.style.opacity = 0;
                 audiostatus.style.opacity = 0;
                 artworkDim.style.opacity = 0;
             }
