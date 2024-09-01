@@ -1,0 +1,7 @@
+Usecase: obs-overlay
+Name: Paradox-tosu
+Author: Hoshino1
+Version: 1.0
+CompatibleWith: tosu
+Resolution: 1920x1080
+author Links: https://github.com/puk06,https://twitter.com/Hoshino2__,https://osu.ppy.sh/users/13673007
