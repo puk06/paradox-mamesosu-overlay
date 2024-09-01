@@ -228,9 +228,9 @@ const modsImgs = {
 };
 
 const gradeImgs = {
-    SSH: "./assets/SSH.svg",
+    XH: "./assets/SSH.svg",
     SH: "./assets/SH.svg",
-    SS: "./assets/SS.svg",
+    X: "./assets/SS.svg",
     S: "./assets/S.svg",
     A: "./assets/A.svg",
     B: "./assets/B.svg",

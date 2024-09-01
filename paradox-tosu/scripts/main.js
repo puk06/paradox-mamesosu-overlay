@@ -248,10 +248,15 @@ ws.onmessage = (wsEvent) => {
                 cache.grade = tokenValue.grade;
                 grade.style.opacity = 1;
                 if (
-                    gradeImgs[tokenValue.grade] == undefined ||
-                    tokenValue.grade == ""
+                    gradeImgs[tokenValue.grade] == undefined
                 ) {
                     grade.src = gradeImgs["default"];
+                } else if (tokenValue.grade == "") {
+                    if (cache.modsArray.includes("HD") || cache.modsArray.includes("FL")) {
+                        grade.src = gradeImgs["XH"];
+                    } else {
+                        grade.src = gradeImgs["X"];
+                    }
                 } else {
                     grade.src = gradeImgs[tokenValue.grade];
                 }
