@@ -618,11 +618,7 @@ currentBG.onload = () => {
         currentBG.src ===
             `http://${hostname}:${port}/paradox-gosumemory/assets/loading.png`
     ) {
-        if (defaultBG.naturalWidth !== 0) {
-            currentBG.src = defaultBG.src;
-        } else {
-            currentBG.src = "./assets/nobg.png";
-        }
+        currentBG.src = "./assets/nobg.png";
     } else {
         averageColor = average(currentBG);
 
