@@ -600,7 +600,7 @@ currentBG.onload = () => {
     if (
         loadingBGcount === 1 &&
         currentBG.src ===
-            `http://${hostname}:${port}/overlays/paradox-tosu/assets/loading.png`
+            `http://${hostname}:${port}/paradox-tosu/assets/loading.png`
     ) {
         if (defaultBG.naturalWidth !== 0) {
             currentBG.src = defaultBG.src;
@@ -644,7 +644,7 @@ currentBG.onload = () => {
         ).then(() => {
             if (
                 currentBG.src ===
-                    `http://${hostname}:${port}/overlays/paradox-tosu/assets/loading.png` &&
+                    `http://${hostname}:${port}/paradox-tosu/assets/loading.png` &&
                 loadingBGcount !== 1
             ) {
                 loadingBGcount++;
