@@ -168,8 +168,9 @@ ws.onmessage = (wsEvent) => {
                         break;
                     }
                 }
+                isPlaying = false;
             }
-            
+
             cache.rawStatus = tokenValue.rawStatus;
         }
 
