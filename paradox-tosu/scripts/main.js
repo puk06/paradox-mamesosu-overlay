@@ -1,4 +1,4 @@
-let ws = new WebSocket(`ws://${hostname}:24050/ws`,);
+let ws = new WebSocket(`ws://${hostname}:${port}/ws`);
 
 ws.onopen = () => {
     console.log("Successfully Connected");
@@ -12,7 +12,10 @@ ws.onerror = (error) => console.log("Socket Error: ", error);
 ws.onmessage = (wsEvent) => {
     try {
         /*receive*/
-        Object.assign(tokenValue, convertTosuDataForm(JSON.parse(wsEvent.data)));
+        Object.assign(
+            tokenValue,
+            convertTosuDataForm(JSON.parse(wsEvent.data)),
+        );
 
         tokenValue.audio.fullPath = encodeURIComponent(
             `${tokenValue.dir}/${tokenValue.mp3Name}`,
@@ -139,7 +142,7 @@ ws.onmessage = (wsEvent) => {
                     isPlaying = true;
                 }, 250);
             }
-            
+
             cache.rawStatus = tokenValue.rawStatus;
         }
 
@@ -248,12 +251,13 @@ ws.onmessage = (wsEvent) => {
             if (tokenValue.rawStatus === 2) {
                 cache.grade = tokenValue.grade;
                 grade.style.opacity = 1;
-                if (
-                    gradeImgs[tokenValue.grade] == undefined
-                ) {
+                if (gradeImgs[tokenValue.grade] == undefined) {
                     grade.src = gradeImgs["default"];
                 } else if (tokenValue.grade == "") {
-                    if (cache.modsArray.includes("HD") || cache.modsArray.includes("FL")) {
+                    if (
+                        cache.modsArray.includes("HD") ||
+                        cache.modsArray.includes("FL")
+                    ) {
                         grade.src = gradeImgs["XH"];
                     } else {
                         grade.src = gradeImgs["X"];
@@ -495,15 +499,9 @@ ws.onmessage = (wsEvent) => {
                 const mStarsDecimal = mStarsParts[1];
 
                 SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-                const mStarsValue = Math.round(
-                    tokenValue.mStars * 100
-                ) / 100;
+                const mStarsValue = Math.round(tokenValue.mStars * 100) / 100;
 
-                for (const {
-                    threshold,
-                    mdiffcolor,
-                    mtextcolor,
-                } of SRColors) {
+                for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                     if (mStarsValue >= threshold) {
                         document.documentElement.style.setProperty(
                             "--mdiffcolor",
@@ -720,7 +718,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function drawClock(canvas, ctx) {
     ctx.reset();
-    const progress = Math.round((tokenValue.time / tokenValue.totaltime) * 10000) / 100;
+    const progress =
+        Math.round((tokenValue.time / tokenValue.totaltime) * 10000) / 100;
     const center = canvas.width / 2;
     const startAngle = -Math.PI / 2;
     const currentTimeAngle = (3.6 * progress * Math.PI) / 180;

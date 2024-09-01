@@ -1,4 +1,4 @@
-let ws = new WebSocket(`ws://${url.hostname}:3000/ws`);
+let ws = new WebSocket(`ws://${hostname}:${port}/ws`);
 
 ws.onopen = () => {
     console.log("Successfully Connected");
@@ -138,21 +138,15 @@ ws.onmessage = (wsEvent) => {
                     isPlaying = true;
                 }, 250);
             }
-            
+
             if (cache.rawStatus === 2 && tokenValue.rawStatus !== 2) {
                 const mStarsParts = tokenValue.mStars.toFixed(2).split(".");
                 const mStarsInteger = mStarsParts[0];
                 const mStarsDecimal = mStarsParts[1];
                 SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-                const mStarsValue = Math.round(
-                    tokenValue.mStars * 100
-                ) / 100;
+                const mStarsValue = Math.round(tokenValue.mStars * 100) / 100;
 
-                for (const {
-                    threshold,
-                    mdiffcolor,
-                    mtextcolor,
-                } of SRColors) {
+                for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                     if (mStarsValue >= threshold) {
                         document.documentElement.style.setProperty(
                             "--mdiffcolor",
@@ -238,9 +232,8 @@ ws.onmessage = (wsEvent) => {
             const liveStarsDecimal = liveStarsParts[1];
             SR.innerHTML = `${liveStarsInteger}<span id="dot">.</span><span id="srdecimal">${liveStarsDecimal}</span>`;
 
-            const liveStarsValue = Math.round(
-                tokenValue.liveStarRating * 100
-            ) / 100;
+            const liveStarsValue =
+                Math.round(tokenValue.liveStarRating * 100) / 100;
 
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
@@ -744,7 +737,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function drawClock(canvas, ctx) {
     ctx.reset();
-    const progress = Math.round((tokenValue.time / tokenValue.totaltime) * 10000) / 100;
+    const progress =
+        Math.round((tokenValue.time / tokenValue.totaltime) * 10000) / 100;
     const center = canvas.width / 2;
     const startAngle = -Math.PI / 2;
     const currentTimeAngle = (3.6 * progress * Math.PI) / 180;
