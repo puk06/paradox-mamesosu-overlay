@@ -138,6 +138,34 @@ ws.onmessage = (wsEvent) => {
                     isPlaying = true;
                 }, 250);
             }
+            
+            if (cache.rawStatus === 2 && tokenValue.rawStatus !== 2) {
+                const mStarsParts = tokenValue.mStars.toFixed(2).split(".");
+                const mStarsInteger = mStarsParts[0];
+                const mStarsDecimal = mStarsParts[1];
+                SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
+                const mStarsValue = Math.round(
+                    tokenValue.mStars * 100
+                ) / 100;
+
+                for (const {
+                    threshold,
+                    mdiffcolor,
+                    mtextcolor,
+                } of SRColors) {
+                    if (mStarsValue >= threshold) {
+                        document.documentElement.style.setProperty(
+                            "--mdiffcolor",
+                            mdiffcolor,
+                        );
+                        document.documentElement.style.setProperty(
+                            "--mtextcolor",
+                            mtextcolor,
+                        );
+                        break;
+                    }
+                }
+            }
 
             cache.rawStatus = tokenValue.rawStatus;
         }
@@ -215,32 +243,6 @@ ws.onmessage = (wsEvent) => {
 
             for (const { threshold, mdiffcolor, mtextcolor } of SRColors) {
                 if (liveStarsValue >= threshold) {
-                    document.documentElement.style.setProperty(
-                        "--mdiffcolor",
-                        mdiffcolor,
-                    );
-                    document.documentElement.style.setProperty(
-                        "--mtextcolor",
-                        mtextcolor,
-                    );
-                    break;
-                }
-            }
-        } else {
-            const mStarsParts = tokenValue.mStars.toFixed(2).split(".");
-            const mStarsInteger = mStarsParts[0];
-            const mStarsDecimal = mStarsParts[1];
-            SR.innerHTML = `${mStarsInteger}<span id="dot">.</span><span id="srdecimal">${mStarsDecimal}</span>`;
-            const mStarsValue = Math.round(
-                tokenValue.mStars * 100
-            ) / 100;
-
-            for (const {
-                threshold,
-                mdiffcolor,
-                mtextcolor,
-            } of SRColors) {
-                if (mStarsValue >= threshold) {
                     document.documentElement.style.setProperty(
                         "--mdiffcolor",
                         mdiffcolor,
@@ -798,11 +800,7 @@ const audioControl = setInterval(() => {
                 !audioElement.paused &&
                 cache.rawStatus !== 7
             ) {
-                try {
-                    audioElement.pause();
-                } catch (error) {
-                    console.log(error);
-                }
+                audioElement.pause();
 
                 consecutiveCount = 0;
                 audioError.style.opacity = 0;
@@ -811,12 +809,8 @@ const audioControl = setInterval(() => {
             }
 
             if (playingCount >= 2 && audioElement.paused) {
-                try {
-                    audioElement.play();
-                } catch (error) {
-                    console.log(error);
-                }
-                
+                audioElement.play();
+
                 playingCount = 0;
                 audioError.style.opacity = 0;
                 audiostatus.style.opacity = 0;

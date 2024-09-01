@@ -139,6 +139,7 @@ ws.onmessage = (wsEvent) => {
                     isPlaying = true;
                 }, 250);
             }
+            
             cache.rawStatus = tokenValue.rawStatus;
         }
 
@@ -776,11 +777,7 @@ const audioControl = setInterval(() => {
                 !audioElement.paused &&
                 cache.rawStatus !== 7
             ) {
-                try {
-                    audioElement.pause();
-                } catch (error) {
-                    console.log(error);
-                }
+                audioElement.pause();
 
                 consecutiveCount = 0;
                 audioError.style.opacity = 0;
@@ -791,11 +788,7 @@ const audioControl = setInterval(() => {
             }
 
             if (playingCount >= 2 && audioElement.paused) {
-                try {
-                    audioElement.play();
-                } catch (error) {
-                    console.log(error);
-                }
+                audioElement.play();
 
                 playingCount = 0;
                 audioError.style.opacity = 0;
