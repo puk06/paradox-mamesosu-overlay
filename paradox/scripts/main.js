@@ -804,7 +804,11 @@ const audioControl = setInterval(() => {
                 !audioElement.paused &&
                 cache.rawStatus !== 7
             ) {
-                audioElement.pause();
+                try {
+                    audioElement.pause();
+                } catch (err) {
+                    console.log(err);
+                }
 
                 consecutiveCount = 0;
                 audioError.style.opacity = 0;
@@ -815,7 +819,11 @@ const audioControl = setInterval(() => {
             }
 
             if (playingCount >= 2 && audioElement.paused) {
-                audioElement.play();
+                try {
+                    audioElement.play();
+                } catch (err) {
+                    console.log(err);
+                }
 
                 playingCount = 0;
                 audioError.style.opacity = 0;

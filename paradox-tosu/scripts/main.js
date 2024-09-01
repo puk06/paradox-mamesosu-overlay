@@ -729,7 +729,8 @@ function drawClock(canvas, ctx) {
 }
 
 const audioControl = setInterval(() => {
-    adjustedTime = adjustedTime = Math.round(((cache.time / 1000) + 0.1) * 100) / 100;
+    adjustedTime = adjustedTime =
+        Math.round((cache.time / 1000 + 0.1) * 100) / 100;
     timeDifference =
         Math.round(
             Math.abs(audioElement.currentTime / 1000 - adjustedTime) * 100,
@@ -781,8 +782,9 @@ const audioControl = setInterval(() => {
                 }
 
                 consecutiveCount = 0;
-                audiostatus.innerHTML = "";
                 audioError.style.opacity = 0;
+                audiostatus.innerHTML = "";
+                audiostatus.classList = "popup";
                 audiostatus.style.opacity = 1;
                 artworkDim.style.opacity = 1;
             }
@@ -795,8 +797,9 @@ const audioControl = setInterval(() => {
                 }
 
                 playingCount = 0;
-                audiostatus.innerHTML = "";
                 audioError.style.opacity = 0;
+                audiostatus.innerHTML = "";
+                audiostatus.classList = "popupfade";
                 audiostatus.style.opacity = 0;
                 artworkDim.style.opacity = 0;
             }
