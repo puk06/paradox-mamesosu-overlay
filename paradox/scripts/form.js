@@ -68,7 +68,9 @@ async function getBanchoData(username, gamemode) {
             username = tokenValue.banchoId;
         }
 
-        const apiUrl = `https://osu.ppy.sh/api/get_user?k=${saved.apiKey}&u=${encodeURIComponent(username)}&m=${gamemode}`;
+        username = encodeURIComponent(username);
+
+        const apiUrl = `https://osu.ppy.sh/api/get_user?k=${saved.apiKey}&u=${username}&m=${gamemode}`;
         const response = await fetch(apiUrl);
         const data = await response.json();
         for (const key in data[0]) {
@@ -424,7 +426,8 @@ function GetLevelPrecise(score) {
 function initializeSetting() {
     document.getElementById("apikey").value = saved.apiKey;
     document.getElementById("banchomode").checked = saved.banchomode;
-    document.getElementById("enableaudiocapture").checked = saved.enableAudioCapture;
+    document.getElementById("enableaudiocapture").checked =
+        saved.enableAudioCapture;
     document.getElementById("enableaudiovisualizer").checked =
         saved.enableAudioVisualizer;
     document
@@ -540,16 +543,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-document
-    .getElementById("Dontshow")
-    .addEventListener("change", function () {
-        if (this.checked) {
-            saved.warning = false;
-        } else {
-            saved.warning = true;
-        }
-        setLocal("warning", saved.warning);
-    });
+document.getElementById("Dontshow").addEventListener("change", function () {
+    if (this.checked) {
+        saved.warning = false;
+    } else {
+        saved.warning = true;
+    }
+    setLocal("warning", saved.warning);
+});
 
 document
     .getElementById("custompanelbg")
@@ -791,17 +792,15 @@ document
         hideGameUIRefresh();
     });
 
-document
-    .getElementById("timingmoving")
-    .addEventListener("change", function () {
-        if (this.checked) {
-            saved.timing.moving = true;
-            setLocal("timing", saved.timing);
-        } else {
-            saved.timing.moving = false;
-            setLocal("timing", saved.timing);
-        }
-    });
+document.getElementById("timingmoving").addEventListener("change", function () {
+    if (this.checked) {
+        saved.timing.moving = true;
+        setLocal("timing", saved.timing);
+    } else {
+        saved.timing.moving = false;
+        setLocal("timing", saved.timing);
+    }
+});
 
 document
     .getElementById("timingnormalize")
@@ -862,21 +861,23 @@ document.getElementById("banchomode").addEventListener("change", function () {
     }
 });
 
-document.getElementById("enableaudiocapture").addEventListener("change", function () {
-    if (this.checked) {
-        saved.enableAudioCapture = true;
-        setLocal("enableAudioCapture", saved.enableAudioCapture);
-    } else {
-        saved.enableAudioCapture = false;
-        setLocal("enableAudioCapture", saved.enableAudioCapture);
-        document.getElementById("enableaudiovisualizer").checked = false;
-        document
-            .getElementById("enableaudiovisualizer")
-            .dispatchEvent(new Event("change"));
-        visualizer.style.opacity = 0;
-        audioElement.pause();
-    }
-});
+document
+    .getElementById("enableaudiocapture")
+    .addEventListener("change", function () {
+        if (this.checked) {
+            saved.enableAudioCapture = true;
+            setLocal("enableAudioCapture", saved.enableAudioCapture);
+        } else {
+            saved.enableAudioCapture = false;
+            setLocal("enableAudioCapture", saved.enableAudioCapture);
+            document.getElementById("enableaudiovisualizer").checked = false;
+            document
+                .getElementById("enableaudiovisualizer")
+                .dispatchEvent(new Event("change"));
+            visualizer.style.opacity = 0;
+            audioElement.pause();
+        }
+    });
 
 document
     .getElementById("enableaudiovisualizer")
@@ -897,17 +898,19 @@ document
         }
     });
 
-document.getElementById("enablebackground").addEventListener("change", function () {
-    if (this.checked) {
-        saved.enableBackground = true;
-        setLocal("enableBackground", saved.enableBackground);
-        document.getElementById("backgroundwrapper").style.opacity = 1;
-    } else {
-        saved.enableBackground = false;
-        setLocal("enableBackground", saved.enableBackground);
-        document.getElementById("backgroundwrapper").style.opacity = 0;
-    }
-});
+document
+    .getElementById("enablebackground")
+    .addEventListener("change", function () {
+        if (this.checked) {
+            saved.enableBackground = true;
+            setLocal("enableBackground", saved.enableBackground);
+            document.getElementById("backgroundwrapper").style.opacity = 1;
+        } else {
+            saved.enableBackground = false;
+            setLocal("enableBackground", saved.enableBackground);
+            document.getElementById("backgroundwrapper").style.opacity = 0;
+        }
+    });
 
 document
     .getElementById("enablehideinterface")
@@ -960,29 +963,33 @@ document.getElementById("enablevoid").addEventListener("change", function () {
     }
 });
 
-document.getElementById("enablekeyoverlay").addEventListener("change", function () {
-    if (this.checked) {
-        saved.enableKeyOverlay = true;
-        setLocal("enableKeyOverlay", saved.enableKeyOverlay);
-        document.getElementById("key").style.opacity = 1;
-        drawKeyOverlay();
-    } else {
-        saved.enableKeyOverlay = false;
-        setLocal("enableKeyOverlay", saved.enableKeyOverlay);
-        document.getElementById("key").style.opacity = 0;
-    }
-});
+document
+    .getElementById("enablekeyoverlay")
+    .addEventListener("change", function () {
+        if (this.checked) {
+            saved.enableKeyOverlay = true;
+            setLocal("enableKeyOverlay", saved.enableKeyOverlay);
+            document.getElementById("key").style.opacity = 1;
+            drawKeyOverlay();
+        } else {
+            saved.enableKeyOverlay = false;
+            setLocal("enableKeyOverlay", saved.enableKeyOverlay);
+            document.getElementById("key").style.opacity = 0;
+        }
+    });
 
-document.getElementById("keyhidegameui").addEventListener("change", function () {
-    if (this.checked) {
-        saved.key.hideGameUI = true;
-        setLocal("key", saved.key);
-    } else {
-        saved.key.hideGameUI = false;
-        setLocal("key", saved.key);
-    }
-    hideGameUIRefresh();
-});
+document
+    .getElementById("keyhidegameui")
+    .addEventListener("change", function () {
+        if (this.checked) {
+            saved.key.hideGameUI = true;
+            setLocal("key", saved.key);
+        } else {
+            saved.key.hideGameUI = false;
+            setLocal("key", saved.key);
+        }
+        hideGameUIRefresh();
+    });
 
 document.getElementById("keyall").addEventListener("change", function () {
     if (this.checked) {

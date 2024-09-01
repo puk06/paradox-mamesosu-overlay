@@ -833,7 +833,10 @@ function convertTosuDataForm(data) {
             M2Count: data.gameplay.keyOverlay.m2.count,
         },
         modsArray: data.menu.mods.str.match(/.{2}/g),
-        username: data.userProfile.name,
+        username:
+            data.menu.state != 7
+                ? data.userProfile.name
+                : data.resultsScreen.name,
         artistRoman: data.menu.bm.metadata.artist,
         artistUnicode: data.menu.bm.metadata.artistOriginal,
         titleRoman: data.menu.bm.metadata.title,
