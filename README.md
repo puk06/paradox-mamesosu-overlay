@@ -1,7 +1,7 @@
 # paradox-mamesosu-overlay
 
 <img src="./sample1.png" width="48%"> <img src="./sample2.png" width="48%">
-<img src="./sample3.png" width="48%"> <img src="./sample4.png" width="48%">
+<img src="./sample4.png" width="48%">
 
 
 日本語の説明は[こちら](./README_JP.md)
